@@ -121,9 +121,16 @@ export default function Home() {
     else if (hour >= 6) setGreeting("早上好");
     else setGreeting("你好");
 
+    // 首次使用：检查是否登录过
+    const user = localStorage.getItem("chuangqian_user");
+    if (!user) {
+      // 未登录，先显示注册页
+      setOverlay("auth");
+    }
+
     // 首次使用：检查是否选过画像
     const settings = getUserSettings();
-    if (!settings.persona) {
+    if (!settings.persona && user) {
       setShowOnboarding(true);
     }
 
