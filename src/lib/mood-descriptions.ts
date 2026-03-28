@@ -1,0 +1,438 @@
+// 100+ 情感描述池
+// style: direct(直白) | literary(文学) | metaphor(比喻) | question(自问) | scene(场景)
+// emotion: heavy(沉重) | anxious(焦虑) | tired(疲惫) | numb(麻木) | melancholy(忧郁) | calm(平静) | hopeful(温暖) | warm(舒适) | angry(愤怒) | alive(生机)
+
+export type MoodStyle = "direct" | "literary" | "metaphor" | "question" | "scene";
+export type MoodEmotion = "heavy" | "anxious" | "tired" | "numb" | "melancholy" | "calm" | "hopeful" | "warm" | "angry" | "alive";
+export type MoodPersona = "highschool" | "college" | "worker" | "homemaker" | "entrepreneur" | "freelance" | "general";
+
+export interface MoodDescription {
+  id: string;
+  text: string;
+  sub?: string;
+  style: MoodStyle;
+  emotion: MoodEmotion;
+  moodValue: number; // 1-5
+  persona?: MoodPersona; // undefined or 'general' = universal, shown to everyone
+}
+
+export const MOOD_DESCRIPTIONS: MoodDescription[] = [
+  // ═══════════════════════════════════════
+  // 直白型 (direct) — 简短、日常、一眼看懂
+  // ═══════════════════════════════════════
+
+  { id: "d01", text: "脑子停不下来", style: "direct", emotion: "anxious", moodValue: 2 },
+  { id: "d02", text: "从早撑到现在，终于躺下了", style: "direct", emotion: "tired", moodValue: 2 },
+  { id: "d03", text: "心里堵堵的", style: "direct", emotion: "heavy", moodValue: 1 },
+  { id: "d04", text: "明天的事还没着落", style: "direct", emotion: "anxious", moodValue: 2 },
+  { id: "d05", text: "说不上来的难受", style: "direct", emotion: "numb", moodValue: 1 },
+  { id: "d06", text: "什么都不想做", style: "direct", emotion: "tired", moodValue: 1 },
+  { id: "d07", text: "想哭但哭不出来", style: "direct", emotion: "heavy", moodValue: 1 },
+  { id: "d08", text: "还好，就是睡不着", style: "direct", emotion: "calm", moodValue: 3 },
+  { id: "d09", text: "活着，但也仅此而已", style: "direct", emotion: "numb", moodValue: 3 },
+  { id: "d10", text: "今天居然没有一件烂事", style: "direct", emotion: "warm", moodValue: 5 },
+  { id: "d11", text: "对自己有点失望", style: "direct", emotion: "heavy", moodValue: 2 },
+  { id: "d12", text: "躺下了但待办清单还在脑子里滚", style: "direct", emotion: "anxious", moodValue: 2 },
+  { id: "d13", text: "被掏空了", style: "direct", emotion: "tired", moodValue: 1 },
+  { id: "d14", text: "叹了好多次气", style: "direct", emotion: "melancholy", moodValue: 2 },
+  { id: "d15", text: "不想睡，也不想醒着", style: "direct", emotion: "numb", moodValue: 2 },
+  { id: "d16", text: "习惯性刷手机", style: "direct", emotion: "numb", moodValue: 3 },
+  { id: "d17", text: "躺下了但不困", style: "direct", emotion: "calm", moodValue: 3 },
+  { id: "d18", text: "翻了三遍通讯录没找到能打的电话", style: "direct", emotion: "melancholy", moodValue: 2 },
+  { id: "d19", text: "被子是暖的，今天还行", style: "direct", emotion: "hopeful", moodValue: 4 },
+  { id: "d20", text: "平静，想安静一会儿", style: "direct", emotion: "calm", moodValue: 4 },
+  { id: "d21", text: "委屈", style: "direct", emotion: "heavy", moodValue: 1 },
+  { id: "d22", text: "想找人聊聊但不知道找谁", style: "direct", emotion: "melancholy", moodValue: 2 },
+  { id: "d23", text: "感觉自己透明了", style: "direct", emotion: "numb", moodValue: 1 },
+  { id: "d24", text: "电量见底了", style: "direct", emotion: "tired", moodValue: 2 },
+  { id: "d25", text: "今天对自己挺满意", style: "direct", emotion: "warm", moodValue: 5 },
+  { id: "d26", text: "终于可以不装了", style: "direct", emotion: "tired", moodValue: 2 },
+  { id: "d27", text: "脑子里全是明天的事", style: "direct", emotion: "anxious", moodValue: 2 },
+  { id: "d28", text: "心跳得快但说不清在怕什么", style: "direct", emotion: "anxious", moodValue: 3 },
+  { id: "d29", text: "难得什么消息都不用回", style: "direct", emotion: "warm", moodValue: 5 },
+  { id: "d30", text: "还在生气", style: "direct", emotion: "heavy", moodValue: 1 },
+
+  // ═══════════════════════════════════════
+  // 文学型 (literary) — 引用/化用经典
+  // ═══════════════════════════════════════
+
+  { id: "l01", text: "疲倦的日子也终将过去", sub: "里尔克意", style: "literary", emotion: "tired", moodValue: 2 },
+  { id: "l02", text: "生活在别处", sub: "米兰·昆德拉", style: "literary", emotion: "melancholy", moodValue: 2 },
+  { id: "l03", text: "我只是想在天亮之前安静地待一会儿", style: "literary", emotion: "calm", moodValue: 3 },
+  { id: "l04", text: "所有人都在催你长大，只有夜晚肯等你", style: "literary", emotion: "melancholy", moodValue: 3 },
+  { id: "l05", text: "活着就是不断失去的过程", sub: "余华意", style: "literary", emotion: "heavy", moodValue: 1 },
+  { id: "l06", text: "不必每天都有意义，躺着也算活着", style: "literary", emotion: "hopeful", moodValue: 4 },
+  { id: "l07", text: "温柔的人是在不动声色地崩溃", style: "literary", emotion: "heavy", moodValue: 1 },
+  { id: "l08", text: "白天是别人的，只有夜晚是自己的", style: "literary", emotion: "calm", moodValue: 3 },
+  { id: "l09", text: "我们都是在黑暗中行走的孩子", style: "literary", emotion: "melancholy", moodValue: 2 },
+  { id: "l10", text: "熬过今晚就好了吧", sub: "虽然昨晚也这么说", style: "literary", emotion: "hopeful", moodValue: 4 },
+  { id: "l11", text: "白天演了一整天，夜晚才轮到自己", style: "literary", emotion: "tired", moodValue: 2 },
+  { id: "l12", text: "把不安的心交给月亮保管", style: "literary", emotion: "calm", moodValue: 4 },
+  { id: "l13", text: "世上只有一种英雄主义：认清生活后依然热爱它", sub: "罗曼·罗兰意", style: "literary", emotion: "hopeful", moodValue: 4 },
+  { id: "l14", text: "夜来了，没有声音，所有的声音都在心里", style: "literary", emotion: "melancholy", moodValue: 2 },
+  { id: "l15", text: "大人只是长大了的小孩", sub: "小王子意", style: "literary", emotion: "melancholy", moodValue: 3 },
+  { id: "l16", text: "凌晨三点半的灵魂是最诚实的", style: "literary", emotion: "calm", moodValue: 3 },
+  { id: "l17", text: "所有坚强都是温柔生的茧", style: "literary", emotion: "tired", moodValue: 2 },
+  { id: "l18", text: "月亮知道我所有不敢说出口的话", style: "literary", emotion: "melancholy", moodValue: 2 },
+  { id: "l19", text: "有些疲惫是洗澡都洗不掉的", style: "literary", emotion: "tired", moodValue: 2 },
+  { id: "l20", text: "你不必刻意成长，生活会推着你走", style: "literary", emotion: "calm", moodValue: 3 },
+  { id: "l21", text: "人要学会和自己的心事和平相处", style: "literary", emotion: "calm", moodValue: 4 },
+  { id: "l22", text: "那些杀不死你的，最终都会让你更疲惫", style: "literary", emotion: "tired", moodValue: 2 },
+  { id: "l23", text: "永远不要对自己的感受感到抱歉", style: "literary", emotion: "warm", moodValue: 4 },
+  { id: "l24", text: "今天的月亮值得一看", style: "literary", emotion: "warm", moodValue: 5 },
+
+  // ═══════════════════════════════════════
+  // 比喻型 (metaphor) — 意象化表达
+  // ═══════════════════════════════════════
+
+  { id: "m01", text: "像一杯放凉的茶", style: "metaphor", emotion: "tired", moodValue: 2 },
+  { id: "m02", text: "像手机只剩1%的电", style: "metaphor", emotion: "tired", moodValue: 1 },
+  { id: "m03", text: "心里像下着小雨", style: "metaphor", emotion: "melancholy", moodValue: 2 },
+  { id: "m04", text: "整个人像一根绷紧的弦", style: "metaphor", emotion: "anxious", moodValue: 2 },
+  { id: "m05", text: "感觉自己在水里", sub: "听得见外面的声音但够不到", style: "metaphor", emotion: "numb", moodValue: 1 },
+  { id: "m06", text: "像一片飘在半空的云", sub: "不上不下", style: "metaphor", emotion: "numb", moodValue: 3 },
+  { id: "m07", text: "脑子里住了一千个小人在开会", style: "metaphor", emotion: "anxious", moodValue: 2 },
+  { id: "m08", text: "像是穿了一天的鞋终于脱下来了", style: "metaphor", emotion: "tired", moodValue: 3 },
+  { id: "m09", text: "心里有块石头", sub: "不大，但一直在", style: "metaphor", emotion: "heavy", moodValue: 2 },
+  { id: "m10", text: "像是暴风雨后的晴天", style: "metaphor", emotion: "hopeful", moodValue: 4 },
+  { id: "m11", text: "整个人像一块被拧干的毛巾", style: "metaphor", emotion: "tired", moodValue: 1 },
+  { id: "m12", text: "像深夜便利店的灯光", sub: "微弱但温暖", style: "metaphor", emotion: "warm", moodValue: 4 },
+  { id: "m13", text: "心里的闹钟一直在响", style: "metaphor", emotion: "anxious", moodValue: 2 },
+  { id: "m14", text: "像一朵快要散开的蒲公英", style: "metaphor", emotion: "numb", moodValue: 2 },
+  { id: "m15", text: "身体很重，灵魂很轻", style: "metaphor", emotion: "tired", moodValue: 2 },
+  { id: "m16", text: "像月亮一样", sub: "缺了一角也在发光", style: "metaphor", emotion: "hopeful", moodValue: 4 },
+  { id: "m17", text: "心里有团雾", sub: "看不清前面的路", style: "metaphor", emotion: "anxious", moodValue: 2 },
+  { id: "m18", text: "像一首听了很多遍的老歌", sub: "熟悉的疲惫", style: "metaphor", emotion: "tired", moodValue: 3 },
+  { id: "m19", text: "像被按了静音键", style: "metaphor", emotion: "numb", moodValue: 2 },
+  { id: "m20", text: "像窗台上那盆刚浇过水的花", sub: "在慢慢恢复", style: "metaphor", emotion: "hopeful", moodValue: 4 },
+
+  // ═══════════════════════════════════════
+  // 自问型 (question) — 内省、自我对话
+  // ═══════════════════════════════════════
+
+  { id: "q01", text: "为什么总是在深夜才诚实？", style: "question", emotion: "melancholy", moodValue: 2 },
+  { id: "q02", text: "今天真的尽力了吗？", style: "question", emotion: "anxious", moodValue: 2 },
+  { id: "q03", text: "如果不用在意别人的看法呢？", style: "question", emotion: "calm", moodValue: 3 },
+  { id: "q04", text: "这件事，明天还会那么重要吗？", style: "question", emotion: "calm", moodValue: 3 },
+  { id: "q05", text: "我上一次开心是什么时候？", style: "question", emotion: "melancholy", moodValue: 2 },
+  { id: "q06", text: "如果可以对今天说一句话？", style: "question", emotion: "calm", moodValue: 3 },
+  { id: "q07", text: "我在逃避什么？", style: "question", emotion: "anxious", moodValue: 2 },
+  { id: "q08", text: "上一次不带目的地笑是什么时候？", style: "question", emotion: "melancholy", moodValue: 2 },
+  { id: "q09", text: "如果不用懂事了呢？", style: "question", emotion: "calm", moodValue: 3 },
+  { id: "q10", text: "如果明天是假期呢？", style: "question", emotion: "hopeful", moodValue: 4 },
+  { id: "q11", text: "这份焦虑是真实的还是想象的？", style: "question", emotion: "anxious", moodValue: 3 },
+  { id: "q12", text: "今天有没有一个好的瞬间？", style: "question", emotion: "hopeful", moodValue: 4 },
+  { id: "q13", text: "如果现在不需要坚强呢？", style: "question", emotion: "heavy", moodValue: 2 },
+  { id: "q14", text: "睡不着的时候，你的心在想谁？", style: "question", emotion: "melancholy", moodValue: 2 },
+  { id: "q15", text: "为什么休息的时候也在想着还没做完的事？", style: "question", emotion: "tired", moodValue: 2 },
+
+  // ═══════════════════════════════════════
+  // 场景型 (scene) — 画面感、代入感
+  // ═══════════════════════════════════════
+
+  { id: "s01", text: "一个人坐在出租车后座，看窗外的路灯一盏一盏地过", style: "scene", emotion: "melancholy", moodValue: 2 },
+  { id: "s02", text: "关上门的那一刻才卸下了笑容", style: "scene", emotion: "tired", moodValue: 2 },
+  { id: "s03", text: "在超市结账的时候突然忘了要买什么", style: "scene", emotion: "numb", moodValue: 3 },
+  { id: "s04", text: "看着天花板数裂缝的第38分钟", style: "scene", emotion: "anxious", moodValue: 2 },
+  { id: "s05", text: "深夜外卖到了，打开盒子的热气扑到脸上", style: "scene", emotion: "warm", moodValue: 4 },
+  { id: "s06", text: "回复了所有消息，但没有人问你还好吗", style: "scene", emotion: "melancholy", moodValue: 1 },
+  { id: "s07", text: "耳机里的歌单循环了三遍还是这首", style: "scene", emotion: "numb", moodValue: 3 },
+  { id: "s08", text: "洗完澡穿上干净的睡衣，有点舒服", style: "scene", emotion: "warm", moodValue: 4 },
+  { id: "s09", text: "在备忘录里写了一大段话然后全部删掉", style: "scene", emotion: "heavy", moodValue: 1 },
+  { id: "s10", text: "把手机翻过来扣在床头，不想再看了", style: "scene", emotion: "tired", moodValue: 2 },
+  { id: "s11", text: "对着镜子里的自己说了一句辛苦了", style: "scene", emotion: "warm", moodValue: 4 },
+  { id: "s12", text: "打了一半的字又撤回了", style: "scene", emotion: "melancholy", moodValue: 2 },
+  { id: "s13", text: "站在阳台上吹了会儿风，什么都没想", style: "scene", emotion: "calm", moodValue: 4 },
+  { id: "s14", text: "闹钟设了三个但知道自己明天还是会迟到", style: "scene", emotion: "tired", moodValue: 3 },
+  { id: "s15", text: "收到一条「早点睡」的消息，嘴角动了一下", style: "scene", emotion: "warm", moodValue: 5 },
+  { id: "s16", text: "盯着微信对话框的「对方正在输入」看了很久", style: "scene", emotion: "anxious", moodValue: 2 },
+
+  // ═══════════════════════════════════════
+  // 愤怒型 (angry) — 红色系
+  // ═══════════════════════════════════════
+
+  { id: "a01", text: "还在生那个人的气", style: "direct", emotion: "angry", moodValue: 1 },
+  { id: "a02", text: "凭什么", style: "direct", emotion: "angry", moodValue: 1 },
+  { id: "a03", text: "越想越气", style: "direct", emotion: "angry", moodValue: 1 },
+  { id: "a04", text: "心里有一团火烧不掉", style: "metaphor", emotion: "angry", moodValue: 1 },
+  { id: "a05", text: "像一壶烧开的水", sub: "盖子快被顶飞了", style: "metaphor", emotion: "angry", moodValue: 1 },
+  { id: "a06", text: "想摔手机", style: "direct", emotion: "angry", moodValue: 1 },
+  { id: "a07", text: "被误解了但解释不清", style: "direct", emotion: "angry", moodValue: 2 },
+  { id: "a08", text: "那句话一直在脑子里回放", style: "scene", emotion: "angry", moodValue: 2 },
+  { id: "a09", text: "不是我的错，但所有人都觉得是", style: "scene", emotion: "angry", moodValue: 1 },
+  { id: "a10", text: "愤怒的背后藏着一个受伤的自己", style: "literary", emotion: "angry", moodValue: 2 },
+  { id: "a11", text: "为什么总是我在忍？", style: "question", emotion: "angry", moodValue: 1 },
+  { id: "a12", text: "编辑了一大段消息然后全删了", sub: "算了", style: "scene", emotion: "angry", moodValue: 2 },
+
+  // ═══════════════════════════════════════
+  // 生机型 (alive) — 绿色系
+  // ═══════════════════════════════════════
+
+  { id: "v01", text: "今天做了一件让自己骄傲的事", style: "direct", emotion: "alive", moodValue: 5 },
+  { id: "v02", text: "突然觉得活着真好", style: "direct", emotion: "alive", moodValue: 5 },
+  { id: "v03", text: "跑完步的那种畅快还在", style: "scene", emotion: "alive", moodValue: 5 },
+  { id: "v04", text: "有了一个新的想法，迫不及待想试试", style: "direct", emotion: "alive", moodValue: 5 },
+  { id: "v05", text: "像春天的第一棵芽", sub: "什么都在生长", style: "metaphor", emotion: "alive", moodValue: 5 },
+  { id: "v06", text: "和朋友大笑了一场，脸都笑疼了", style: "scene", emotion: "alive", moodValue: 5 },
+  { id: "v07", text: "被夸了，偷偷开心了好久", style: "scene", emotion: "alive", moodValue: 5 },
+  { id: "v08", text: "有些日子就是值得被记住的", style: "literary", emotion: "alive", moodValue: 5 },
+  { id: "v09", text: "今天的自己有点发光", style: "metaphor", emotion: "alive", moodValue: 5 },
+  { id: "v10", text: "好久没有这种心跳加速的感觉了", style: "direct", emotion: "alive", moodValue: 4 },
+  { id: "v11", text: "明天也想这样过", style: "direct", emotion: "alive", moodValue: 5 },
+  { id: "v12", text: "如果今天可以重播一遍就好了", style: "question", emotion: "alive", moodValue: 5 },
+
+  // ═══════════════════════════════════════
+  // 职场人 (worker) — ~35%
+  // ═══════════════════════════════════════
+
+  { id: "pw01", text: "被老板cue了但没准备好", style: "scene", emotion: "anxious", moodValue: 2, persona: "worker" },
+  { id: "pw02", text: "\"收到\"两个字打了删删了打", style: "scene", emotion: "anxious", moodValue: 2, persona: "worker" },
+  { id: "pw03", text: "地铁上闭着眼但根本没睡着", style: "scene", emotion: "tired", moodValue: 2, persona: "worker" },
+  { id: "pw04", text: "想辞职但不敢", style: "direct", emotion: "heavy", moodValue: 1, persona: "worker" },
+  { id: "pw05", text: "PPT做到第27版", style: "scene", emotion: "tired", moodValue: 1, persona: "worker" },
+  { id: "pw06", text: "工位上偷偷红了眼眶", sub: "假装在看电脑", style: "scene", emotion: "heavy", moodValue: 1, persona: "worker" },
+  { id: "pw07", text: "周末也在回消息", sub: "工作和生活的边界模糊了", style: "scene", emotion: "tired", moodValue: 2, persona: "worker" },
+  { id: "pw08", text: "开了一天的会，脑子像浆糊", style: "metaphor", emotion: "tired", moodValue: 1, persona: "worker" },
+  { id: "pw09", text: "KPI像一座山压在胸口", style: "metaphor", emotion: "anxious", moodValue: 2, persona: "worker" },
+  { id: "pw10", text: "加班到现在，外面已经没有地铁了", style: "scene", emotion: "tired", moodValue: 1, persona: "worker" },
+  { id: "pw11", text: "领导的已读不回比什么都可怕", style: "scene", emotion: "anxious", moodValue: 2, persona: "worker" },
+  { id: "pw12", text: "职场里没有真朋友吧", style: "question", emotion: "melancholy", moodValue: 2, persona: "worker" },
+  { id: "pw13", text: "厕所是今天唯一的避难所", style: "scene", emotion: "heavy", moodValue: 1, persona: "worker" },
+  { id: "pw14", text: "年终总结写了三遍还是觉得自己什么都没做", style: "scene", emotion: "numb", moodValue: 2, persona: "worker" },
+  { id: "pw15", text: "周日晚上的恐惧比周一早上还重", style: "direct", emotion: "anxious", moodValue: 2, persona: "worker" },
+  { id: "pw16", text: "工位上的绿植都比我活得好", style: "metaphor", emotion: "tired", moodValue: 2, persona: "worker" },
+  { id: "pw17", text: "体检报告到了但不敢打开", style: "scene", emotion: "anxious", moodValue: 1, persona: "worker" },
+  { id: "pw18", text: "下班了但心还没下班", style: "direct", emotion: "anxious", moodValue: 2, persona: "worker" },
+  { id: "pw19", text: "被甲方改需求改到怀疑人生", style: "scene", emotion: "angry", moodValue: 1, persona: "worker" },
+  { id: "pw20", text: "在工位上偷偷深呼吸了好多次", style: "scene", emotion: "anxious", moodValue: 2, persona: "worker" },
+  { id: "pw21", text: "被裁了但还没告诉家人", style: "scene", emotion: "heavy", moodValue: 1, persona: "worker" },
+  { id: "pw22", text: "电梯里碰到同事假笑了一下", sub: "脸都僵了", style: "scene", emotion: "tired", moodValue: 2, persona: "worker" },
+  { id: "pw23", text: "工资到账的那一秒是本月最开心的时刻", style: "scene", emotion: "warm", moodValue: 4, persona: "worker" },
+  { id: "pw24", text: "新来的领导比我年轻", sub: "说不出什么感觉", style: "scene", emotion: "melancholy", moodValue: 2, persona: "worker" },
+  { id: "pw25", text: "在厕所里躲了十分钟才出来", style: "scene", emotion: "tired", moodValue: 2, persona: "worker" },
+  { id: "pw26", text: "对着电脑发呆被同事喊了三遍", style: "scene", emotion: "numb", moodValue: 2, persona: "worker" },
+  { id: "pw27", text: "35岁了开始怕被优化", style: "direct", emotion: "anxious", moodValue: 1, persona: "worker" },
+  { id: "pw28", text: "周五下午的快乐只维持到周日晚上", style: "scene", emotion: "melancholy", moodValue: 3, persona: "worker" },
+
+  // ═══════════════════════════════════════
+  // 学生 (student) — ~25%
+  // ═══════════════════════════════════════
+
+  { id: "ps01", text: "考试倒计时但什么都没看", style: "direct", emotion: "anxious", moodValue: 1, persona: "college" },
+  { id: "ps02", text: "室友睡了我还在焦虑", style: "scene", emotion: "anxious", moodValue: 2, persona: "college" },
+  { id: "ps03", text: "论文一个字没写", style: "direct", emotion: "anxious", moodValue: 1, persona: "college" },
+  { id: "ps04", text: "GPA算了又算还是不够", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps05", text: "毕业照笑得很开心", sub: "但不知道下一步往哪走", style: "scene", emotion: "numb", moodValue: 2, persona: "college" },
+  { id: "ps06", text: "考研二战了还是没把握", sub: "但也不敢停", style: "direct", emotion: "anxious", moodValue: 1, persona: "college" },
+  { id: "ps07", text: "图书馆坐了一天但效率为零", style: "scene", emotion: "tired", moodValue: 2, persona: "college" },
+  { id: "ps08", text: "实习日报写了一个小时", sub: "但没有人会看", style: "scene", emotion: "numb", moodValue: 2, persona: "college" },
+  { id: "ps09", text: "选课像赌博", sub: "赌输了一整个学期", style: "metaphor", emotion: "heavy", moodValue: 2, persona: "college" },
+  { id: "ps10", text: "存款只剩两位数但朋友约吃饭", sub: "不好意思说没钱", style: "scene", emotion: "heavy", moodValue: 2, persona: "college" },
+  { id: "ps11", text: "实习投了50份简历，已读不回", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps12", text: "室友都睡了我戴着耳机假装没哭", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps13", text: "父母问成绩的时候不知道怎么回答", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps14", text: "大学过了一半还是不知道自己喜欢什么", style: "question", emotion: "numb", moodValue: 2, persona: "college" },
+  { id: "ps15", text: "期末周像一场打不完的仗", style: "metaphor", emotion: "anxious", moodValue: 1, persona: "college" },
+  { id: "ps16", text: "考研还是就业？", sub: "每天都在纠结", style: "question", emotion: "anxious", moodValue: 2, persona: "college" },
+  { id: "ps17", text: "同学保研的保研留学的留学", sub: "我连简历都写不满一页", style: "scene", emotion: "heavy", moodValue: 2, persona: "college" },
+  { id: "ps18", text: "考研自习室只剩我一个人了", sub: "不知道是坚持还是死撑", style: "scene", emotion: "melancholy", moodValue: 2, persona: "college" },
+  { id: "ps19", text: "实习被当免费劳动力", sub: "但简历不能空着", style: "direct", emotion: "angry", moodValue: 2, persona: "college" },
+  { id: "ps20", text: "秋招投了五十份简历没一个回音", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps21", text: "室友打游戏到凌晨三点", sub: "我在假装睡着", style: "scene", emotion: "angry", moodValue: 2, persona: "college" },
+  { id: "ps22", text: "分手了但期末还要复习", sub: "眼泪和公式一起背", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps23", text: "奖学金差0.1分", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps24", text: "四个人的寝室四个微信群", sub: "表面和谐心里疏离", style: "scene", emotion: "numb", moodValue: 2, persona: "college" },
+  { id: "ps25", text: "第一次离家这么远", sub: "想家但不敢说", style: "direct", emotion: "melancholy", moodValue: 2, persona: "college" },
+  { id: "ps26", text: "食堂吃腻了外卖又贵", style: "direct", emotion: "tired", moodValue: 3, persona: "college" },
+  { id: "ps27", text: "导师又把我的方案否了", style: "scene", emotion: "heavy", moodValue: 1, persona: "college" },
+  { id: "ps28", text: "答辩前一晚通宵了", sub: "脑子已经是空的", style: "scene", emotion: "tired", moodValue: 1, persona: "college" },
+  { id: "ps29", text: "同学都在考公考研我还在纠结", style: "direct", emotion: "anxious", moodValue: 2, persona: "college" },
+  { id: "ps30", text: "学费又涨了不好意思和家里说", style: "scene", emotion: "heavy", moodValue: 2, persona: "college" },
+  { id: "ps31", text: "寝室关系表面和谐", sub: "群聊之外还有群聊", style: "scene", emotion: "numb", moodValue: 2, persona: "college" },
+  { id: "ps32", text: "毕业设计像一座搬不动的山", style: "metaphor", emotion: "anxious", moodValue: 1, persona: "college" },
+  { id: "ps33", text: "大学四年好像什么也没学到", style: "question", emotion: "numb", moodValue: 2, persona: "college" },
+
+  // ═══════════════════════════════════════
+  // 全职妈妈/爸爸 (homemaker) — ~15%
+  // ═══════════════════════════════════════
+
+  { id: "ph01", text: "孩子终于睡了我终于是自己了", style: "scene", emotion: "tired", moodValue: 3, persona: "homemaker" },
+  { id: "ph02", text: "今天被熊孩子气哭了", style: "direct", emotion: "angry", moodValue: 1, persona: "homemaker" },
+  { id: "ph03", text: "孩子喊第100遍妈妈的时候想消失五分钟", style: "direct", emotion: "tired", moodValue: 2, persona: "homemaker" },
+  { id: "ph04", text: "在超市因为选错酸奶突然崩溃了", style: "scene", emotion: "heavy", moodValue: 1, persona: "homemaker" },
+  { id: "ph05", text: "\"你不就带个孩子吗\"", sub: "这句话的杀伤力他永远不懂", style: "scene", emotion: "heavy", moodValue: 1, persona: "homemaker" },
+  { id: "ph06", text: "孩子的笑是今天唯一的光", style: "literary", emotion: "warm", moodValue: 4, persona: "homemaker" },
+  { id: "ph07", text: "一个人撑起一整个家的感觉", sub: "又骄傲又疲惫", style: "direct", emotion: "tired", moodValue: 2, persona: "homemaker" },
+  { id: "ph08", text: "朋友聚会只能聊孩子", sub: "别的话题插不上嘴了", style: "scene", emotion: "melancholy", moodValue: 2, persona: "homemaker" },
+  { id: "ph09", text: "我的价值不只是带孩子做饭吧？", style: "question", emotion: "heavy", moodValue: 1, persona: "homemaker" },
+  { id: "ph10", text: "把客厅收拾干净的那十分钟是今天的高光", style: "scene", emotion: "warm", moodValue: 4, persona: "homemaker" },
+  { id: "ph11", text: "在厨房里站了三个小时，腰快断了", style: "scene", emotion: "tired", moodValue: 1, persona: "homemaker" },
+  { id: "ph12", text: "半夜起来喂奶觉得世界只剩自己一个人", style: "scene", emotion: "melancholy", moodValue: 1, persona: "homemaker" },
+  { id: "ph13", text: "想找个人聊天但话题只剩孩子了", style: "scene", emotion: "melancholy", moodValue: 2, persona: "homemaker" },
+  { id: "ph14", text: "半夜起来给孩子盖被子，突然心软了", style: "scene", emotion: "warm", moodValue: 4, persona: "homemaker" },
+  { id: "ph15", text: "孩子问妈妈你怎么不开心", sub: "原来我连装都装不好了", style: "scene", emotion: "heavy", moodValue: 1, persona: "homemaker" },
+  { id: "ph16", text: "像一台不能关机的电脑", sub: "后台永远在运行", style: "metaphor", emotion: "tired", moodValue: 2, persona: "homemaker" },
+  { id: "ph17", text: "孩子发烧了整夜没睡", sub: "明天还要继续", style: "scene", emotion: "tired", moodValue: 1, persona: "homemaker" },
+  { id: "ph18", text: "全职在家被说不工作", style: "direct", emotion: "angry", moodValue: 1, persona: "homemaker" },
+  { id: "ph19", text: "朋友圈都在晒事业我在晒娃", sub: "有时候会恍惚", style: "scene", emotion: "melancholy", moodValue: 2, persona: "homemaker" },
+  { id: "ph20", text: "你又没上班累什么", sub: "这句话像刀", style: "scene", emotion: "angry", moodValue: 1, persona: "homemaker" },
+  { id: "ph21", text: "想回职场但简历上空白期太长了", style: "direct", emotion: "anxious", moodValue: 2, persona: "homemaker" },
+  { id: "ph22", text: "终于等到孩子午睡的自由时光", style: "scene", emotion: "calm", moodValue: 4, persona: "homemaker" },
+  { id: "ph23", text: "菜价涨了在超市算了半天", style: "scene", emotion: "anxious", moodValue: 2, persona: "homemaker" },
+  { id: "ph24", text: "家长群的消息一条比一条焦虑", style: "scene", emotion: "anxious", moodValue: 2, persona: "homemaker" },
+  { id: "ph25", text: "孩子叫了一声妈妈/爸爸就值了", style: "scene", emotion: "warm", moodValue: 5, persona: "homemaker" },
+  { id: "ph26", text: "今天出门买菜是唯一和外界接触的时间", style: "scene", emotion: "melancholy", moodValue: 2, persona: "homemaker" },
+  { id: "ph27", text: "孩子不听话的时候觉得自己好失败", style: "direct", emotion: "heavy", moodValue: 1, persona: "homemaker" },
+  { id: "ph28", text: "老人帮忙带娃但观念冲突不断", style: "direct", emotion: "angry", moodValue: 2, persona: "homemaker" },
+  { id: "ph29", text: "镜子里的人好陌生", sub: "什么时候变成这样了", style: "scene", emotion: "melancholy", moodValue: 2, persona: "homemaker" },
+  { id: "ph30", text: "三年没买过一件自己的衣服了", style: "scene", emotion: "melancholy", moodValue: 2, persona: "homemaker" },
+  { id: "ph31", text: "做了一桌菜没人说好吃", style: "scene", emotion: "heavy", moodValue: 2, persona: "homemaker" },
+  { id: "ph32", text: "有时候锁上厕所门就是为了哭一下", style: "scene", emotion: "heavy", moodValue: 1, persona: "homemaker" },
+
+  // ═══════════════════════════════════════
+  // 中年 (midlife) — ~15%
+  // ═══════════════════════════════════════
+
+  { id: "pm01", text: "上有老下有小", style: "direct", emotion: "heavy", moodValue: 2, persona: "worker" },
+  { id: "pm02", text: "房贷还有二十年", style: "direct", emotion: "anxious", moodValue: 1, persona: "worker" },
+  { id: "pm03", text: "身体发出了警报", style: "direct", emotion: "anxious", moodValue: 1, persona: "worker" },
+  { id: "pm04", text: "朋友圈都不敢刷了", sub: "每条都在提醒我落后了", style: "scene", emotion: "heavy", moodValue: 1, persona: "worker" },
+  { id: "pm05", text: "不敢生病不敢停", style: "direct", emotion: "tired", moodValue: 1, persona: "worker" },
+  { id: "pm06", text: "半夜醒来想到的第一件事是钱", style: "scene", emotion: "anxious", moodValue: 1, persona: "worker" },
+  { id: "pm07", text: "四十岁了还在找自己", style: "question", emotion: "melancholy", moodValue: 2, persona: "worker" },
+  { id: "pm08", text: "体检报告不敢打开", style: "scene", emotion: "anxious", moodValue: 1, persona: "worker" },
+  { id: "pm09", text: "孩子的学费、父母的医药费、自己的焦虑", sub: "哪个都放不下", style: "direct", emotion: "heavy", moodValue: 1, persona: "worker" },
+  { id: "pm10", text: "像一棵树", sub: "所有人都在乘凉但没人问树累不累", style: "metaphor", emotion: "tired", moodValue: 1, persona: "worker" },
+  { id: "pm11", text: "年轻时的梦想现在想起来有点心酸", style: "literary", emotion: "melancholy", moodValue: 2, persona: "worker" },
+  { id: "pm12", text: "车停好了但不想上楼", sub: "在车里坐了二十分钟", style: "scene", emotion: "numb", moodValue: 2, persona: "worker" },
+  { id: "pm13", text: "老婆说我变了，可能她是对的", style: "scene", emotion: "heavy", moodValue: 2, persona: "worker" },
+  { id: "pm14", text: "背上的责任越来越重，肩膀越来越疼", style: "metaphor", emotion: "tired", moodValue: 1, persona: "worker" },
+  { id: "pm15", text: "如果可以重来一次会怎样？", style: "question", emotion: "melancholy", moodValue: 2, persona: "worker" },
+  { id: "pm16", text: "失眠的原因太多，数不过来", style: "direct", emotion: "anxious", moodValue: 1, persona: "worker" },
+  { id: "pm17", text: "中年人的崩溃都是静悄悄的", style: "literary", emotion: "heavy", moodValue: 1, persona: "worker" },
+  { id: "pm18", text: "今天也假装没事地过完了一天", style: "scene", emotion: "tired", moodValue: 2, persona: "worker" },
+
+  // ═══════════════════════════════════════
+  // 银发族 (senior) — ~10%
+  // ═══════════════════════════════════════
+
+  { id: "pe01", text: "今天去医院排了一天队", style: "scene", emotion: "tired", moodValue: 1, persona: "freelance" },
+  { id: "pe02", text: "孩子们好久没来电话了", style: "direct", emotion: "melancholy", moodValue: 2, persona: "freelance" },
+  { id: "pe03", text: "老伴的身体让我担心", style: "direct", emotion: "anxious", moodValue: 2, persona: "freelance" },
+  { id: "pe04", text: "凌晨四点就醒了", sub: "天亮得好慢", style: "scene", emotion: "tired", moodValue: 2, persona: "freelance" },
+  { id: "pe05", text: "看着老照片想起好多事", style: "scene", emotion: "melancholy", moodValue: 3, persona: "freelance" },
+  { id: "pe06", text: "公园里走了两圈，今天还不错", style: "scene", emotion: "warm", moodValue: 4, persona: "freelance" },
+  { id: "pe07", text: "药又涨价了", style: "direct", emotion: "anxious", moodValue: 2, persona: "freelance" },
+  { id: "pe08", text: "年轻时觉得来日方长", sub: "现在才懂珍惜", style: "literary", emotion: "melancholy", moodValue: 3, persona: "freelance" },
+  { id: "pe09", text: "老朋友又少了一个", style: "direct", emotion: "heavy", moodValue: 1, persona: "freelance" },
+  { id: "pe10", text: "摔了一跤没敢告诉孩子", sub: "怕他们担心", style: "scene", emotion: "heavy", moodValue: 2, persona: "freelance" },
+  { id: "pe11", text: "一个人吃饭的时候特别安静", style: "scene", emotion: "melancholy", moodValue: 2, persona: "freelance" },
+  { id: "pe12", text: "腿脚不如从前了", sub: "但今天还是走出了门", style: "direct", emotion: "hopeful", moodValue: 3, persona: "freelance" },
+  { id: "pe13", text: "孙子的视频看了好多遍", style: "scene", emotion: "warm", moodValue: 5, persona: "freelance" },
+  { id: "pe14", text: "晚上的时间特别长", style: "direct", emotion: "melancholy", moodValue: 2, persona: "freelance" },
+  { id: "pe15", text: "今天阳光很好，晒了会儿太阳", style: "scene", emotion: "calm", moodValue: 4, persona: "freelance" },
+  { id: "pe16", text: "手机上的字太小了", sub: "连看个消息都费劲", style: "scene", emotion: "tired", moodValue: 2, persona: "freelance" },
+  { id: "fl01", text: "回复\"在忙\"但其实一整天没人找", style: "scene", emotion: "numb", moodValue: 2, persona: "freelance" },
+  { id: "fl02", text: "收入不稳定的焦虑", sub: "这个月还没接到活", style: "direct", emotion: "anxious", moodValue: 1, persona: "freelance" },
+  { id: "fl03", text: "今天没有一个人找我", style: "direct", emotion: "melancholy", moodValue: 2, persona: "freelance" },
+  { id: "fl04", text: "咖啡馆坐了一天产出为零", sub: "但至少出了门", style: "scene", emotion: "tired", moodValue: 2, persona: "freelance" },
+  { id: "fl05", text: "退休了才发现朋友都是单位里的", style: "direct", emotion: "melancholy", moodValue: 2, persona: "freelance" },
+  { id: "fl06", text: "从忙碌到清闲的落差感", sub: "像突然被按了暂停", style: "metaphor", emotion: "melancholy", moodValue: 2, persona: "freelance" },
+  { id: "fl07", text: "不用定闹钟了但失眠了", style: "direct", emotion: "anxious", moodValue: 2, persona: "freelance" },
+  { id: "fl08", text: "别人的周末是放松", sub: "我的周末是焦虑的延续", style: "direct", emotion: "anxious", moodValue: 2, persona: "freelance" },
+  { id: "fl09", text: "甲方的需求改了又改", sub: "但不敢说不", style: "scene", emotion: "angry", moodValue: 2, persona: "freelance" },
+  { id: "fl10", text: "别人问我做什么的我不知道怎么回答", style: "scene", emotion: "numb", moodValue: 2, persona: "freelance" },
+  { id: "fl11", text: "自己交社保的那一刻觉得好孤独", style: "scene", emotion: "melancholy", moodValue: 2, persona: "freelance" },
+  { id: "fl12", text: "今天终于把拖了半个月的活交了", style: "scene", emotion: "hopeful", moodValue: 4, persona: "freelance" },
+  { id: "fl13", text: "下午三点的咖啡馆只有我在工作", style: "scene", emotion: "calm", moodValue: 3, persona: "freelance" },
+  { id: "fl14", text: "接了一个不太想做的项目", sub: "但需要钱", style: "direct", emotion: "heavy", moodValue: 2, persona: "freelance" },
+  { id: "fl15", text: "自由职业的自由是假的", sub: "只是换了个地方焦虑", style: "literary", emotion: "anxious", moodValue: 2, persona: "freelance" },
+  { id: "fl16", text: "早上醒来没有闹钟", sub: "但也没有方向", style: "metaphor", emotion: "numb", moodValue: 3, persona: "freelance" },
+
+  // ═══════════════════════════════════════
+  // 中小学生 (highschool)
+  // ═══════════════════════════════════════
+  { id: "hs01", text: "作业写不完了", style: "direct", emotion: "anxious", moodValue: 2, persona: "highschool" },
+  { id: "hs02", text: "当着全班被点名批评", sub: "恨不得钻进地里", style: "scene", emotion: "heavy", moodValue: 1, persona: "highschool" },
+  { id: "hs03", text: "考试没考好怕回家被骂", style: "direct", emotion: "anxious", moodValue: 1, persona: "highschool" },
+  { id: "hs04", text: "好朋友突然不理我了", style: "direct", emotion: "melancholy", moodValue: 1, persona: "highschool" },
+  { id: "hs05", text: "妈偷看了我的聊天记录", style: "scene", emotion: "angry", moodValue: 1, persona: "highschool" },
+  { id: "hs06", text: "月考排名贴在走廊上", sub: "经过的时候假装没看", style: "scene", emotion: "heavy", moodValue: 1, persona: "highschool" },
+  { id: "hs07", text: "爸妈又吵架了", style: "direct", emotion: "heavy", moodValue: 1, persona: "highschool" },
+  { id: "hs08", text: "明天有考试但什么都没复习", style: "direct", emotion: "anxious", moodValue: 2, persona: "highschool" },
+  { id: "hs09", text: "被同学嘲笑了装作不在意", style: "scene", emotion: "heavy", moodValue: 1, persona: "highschool" },
+  { id: "hs10", text: "在被子里偷偷看手机", sub: "这是一天里唯一属于自己的时间", style: "scene", emotion: "calm", moodValue: 3, persona: "highschool" },
+  { id: "hs11", text: "暗恋的人今天看了我一眼", style: "scene", emotion: "alive", moodValue: 5, persona: "highschool" },
+  { id: "hs12", text: "周末终于可以睡懒觉了", style: "direct", emotion: "hopeful", moodValue: 5, persona: "highschool" },
+  { id: "hs13", text: "大人根本不理解我", style: "direct", emotion: "angry", moodValue: 1, persona: "highschool" },
+  { id: "hs14", text: "学这些到底有什么用？", sub: "没人回答过我", style: "question", emotion: "numb", moodValue: 2, persona: "highschool" },
+  { id: "hs15", text: "喜欢一个人但连看都不敢多看", style: "direct", emotion: "melancholy", moodValue: 2, persona: "highschool" },
+  { id: "hs16", text: "中考倒计时每天少一天", sub: "心跳也跟着加速", style: "direct", emotion: "anxious", moodValue: 1, persona: "highschool" },
+  { id: "hs17", text: "日记被爸妈偷看了", style: "scene", emotion: "angry", moodValue: 1, persona: "highschool" },
+  { id: "hs18", text: "补课补到想吐", sub: "周末比上学还累", style: "direct", emotion: "tired", moodValue: 1, persona: "highschool" },
+  { id: "hs19", text: "喜欢的人换了同桌", style: "scene", emotion: "melancholy", moodValue: 2, persona: "highschool" },
+  { id: "hs20", text: "月考排名又掉了", style: "direct", emotion: "heavy", moodValue: 1, persona: "highschool" },
+  { id: "hs21", text: "又被拿来和别人家的孩子比了", style: "direct", emotion: "angry", moodValue: 1, persona: "highschool" },
+  { id: "hs22", text: "在学校装开朗回家才敢丧", style: "scene", emotion: "tired", moodValue: 2, persona: "highschool" },
+  { id: "hs23", text: "班主任说要叫家长", sub: "回家的路走得特别慢", style: "scene", emotion: "anxious", moodValue: 1, persona: "highschool" },
+  { id: "hs24", text: "和爸妈说什么都说不通", style: "direct", emotion: "angry", moodValue: 2, persona: "highschool" },
+  { id: "hs25", text: "书包被翻了", sub: "连最后一点隐私都没有", style: "scene", emotion: "angry", moodValue: 1, persona: "highschool" },
+  { id: "hs26", text: "晚自习偷偷写了一封没寄出去的信", style: "scene", emotion: "melancholy", moodValue: 3, persona: "highschool" },
+  { id: "hs27", text: "明明很努力了成绩就是上不去", style: "direct", emotion: "heavy", moodValue: 1, persona: "highschool" },
+  { id: "hs28", text: "手机被没收了感觉和世界断开了", style: "scene", emotion: "angry", moodValue: 1, persona: "highschool" },
+  { id: "hs29", text: "高考像一座山", sub: "翻过去才能看见风景", style: "metaphor", emotion: "anxious", moodValue: 2, persona: "highschool" },
+  { id: "hs30", text: "班主任找我谈话了又", style: "scene", emotion: "anxious", moodValue: 2, persona: "highschool" },
+  { id: "hs31", text: "不想上学但也说不出为什么", style: "direct", emotion: "numb", moodValue: 2, persona: "highschool" },
+  { id: "hs32", text: "凭什么大人可以我就不行", style: "question", emotion: "angry", moodValue: 1, persona: "highschool" },
+  { id: "hs33", text: "下课十分钟是全天最自由的时候", style: "scene", emotion: "calm", moodValue: 4, persona: "highschool" },
+
+  // ═══════════════════════════════════════
+  // 创业/投资者 (entrepreneur)
+  // ═══════════════════════════════════════
+  { id: "en01", text: "融资又黄了", style: "direct", emotion: "heavy", moodValue: 1, persona: "entrepreneur" },
+  { id: "en02", text: "现金流只够撑两个月", style: "direct", emotion: "anxious", moodValue: 1, persona: "entrepreneur" },
+  { id: "en03", text: "合伙人开始偷偷投简历了", style: "scene", emotion: "heavy", moodValue: 1, persona: "entrepreneur" },
+  { id: "en04", text: "今天签了一个大单", style: "direct", emotion: "alive", moodValue: 5, persona: "entrepreneur" },
+  { id: "en05", text: "半夜还在回客户消息", style: "scene", emotion: "tired", moodValue: 2, persona: "entrepreneur" },
+  { id: "en06", text: "PPT里的增长曲线只存在于PPT里", style: "scene", emotion: "numb", moodValue: 2, persona: "entrepreneur" },
+  { id: "en07", text: "员工离职了我一个人顶", style: "direct", emotion: "tired", moodValue: 1, persona: "entrepreneur" },
+  { id: "en08", text: "发完工资看着账户余额发呆", style: "scene", emotion: "anxious", moodValue: 1, persona: "entrepreneur" },
+  { id: "en09", text: "所有人都觉得我疯了", sub: "但我知道这条路是对的", style: "metaphor", emotion: "calm", moodValue: 3, persona: "entrepreneur" },
+  { id: "en10", text: "面试别人的时候在想", sub: "我自己也想被面试", style: "scene", emotion: "tired", moodValue: 2, persona: "entrepreneur" },
+  { id: "en11", text: "用户数据终于涨了", style: "direct", emotion: "alive", moodValue: 5, persona: "entrepreneur" },
+  { id: "en12", text: "已经记不清上次放假是什么时候了", style: "direct", emotion: "tired", moodValue: 2, persona: "entrepreneur" },
+  { id: "en13", text: "凌晨三点还在改BP", style: "scene", emotion: "tired", moodValue: 2, persona: "entrepreneur" },
+  { id: "en14", text: "如果失败了怎么办？", style: "question", emotion: "anxious", moodValue: 2, persona: "entrepreneur" },
+  { id: "en15", text: "家人问什么时候能挣到钱", sub: "我笑了笑没说话", style: "scene", emotion: "heavy", moodValue: 2, persona: "entrepreneur" },
+  { id: "en16", text: "市场验证了我的判断", sub: "那一刻值了", style: "scene", emotion: "alive", moodValue: 5, persona: "entrepreneur" },
+  { id: "en17", text: "产品上线了但没人用", style: "direct", emotion: "heavy", moodValue: 1, persona: "entrepreneur" },
+  { id: "en18", text: "被投资人问了三个小时", sub: "像在过堂", style: "scene", emotion: "tired", moodValue: 1, persona: "entrepreneur" },
+  { id: "en19", text: "团建时装作轻松", sub: "其实下个月工资还没着落", style: "scene", emotion: "anxious", moodValue: 2, persona: "entrepreneur" },
+  { id: "en20", text: "家人不理解为什么不去找个稳定工作", style: "direct", emotion: "heavy", moodValue: 2, persona: "entrepreneur" },
+  { id: "en21", text: "看着账上的数字心跳加速", sub: "不是激动是害怕", style: "scene", emotion: "anxious", moodValue: 1, persona: "entrepreneur" },
+  { id: "en22", text: "竞对抄了我们的方案", style: "direct", emotion: "angry", moodValue: 1, persona: "entrepreneur" },
+  { id: "en23", text: "深夜一个人在办公室", sub: "整栋楼只有我的灯亮着", style: "scene", emotion: "melancholy", moodValue: 2, persona: "entrepreneur" },
+  { id: "en24", text: "第一个付费用户来了", style: "direct", emotion: "alive", moodValue: 5, persona: "entrepreneur" },
+  { id: "en25", text: "股市收盘后才敢看手机", style: "scene", emotion: "anxious", moodValue: 2, persona: "entrepreneur" },
+  { id: "en26", text: "投资人说再考虑考虑", sub: "这句话听了无数遍", style: "scene", emotion: "numb", moodValue: 2, persona: "entrepreneur" },
+  { id: "en27", text: "核心成员要走了", sub: "比失恋还难受", style: "direct", emotion: "heavy", moodValue: 1, persona: "entrepreneur" },
+  { id: "en28", text: "发工资的日子比任何deadline都紧张", style: "direct", emotion: "anxious", moodValue: 1, persona: "entrepreneur" },
+  { id: "en29", text: "终于拿到了term sheet", style: "direct", emotion: "alive", moodValue: 5, persona: "entrepreneur" },
+  { id: "en30", text: "创业三年没休过一个完整的假", style: "direct", emotion: "tired", moodValue: 2, persona: "entrepreneur" },
+  { id: "en31", text: "demo day讲完了浑身发抖", style: "scene", emotion: "anxious", moodValue: 2, persona: "entrepreneur" },
+  { id: "en32", text: "朋友们聚会聊生活我只能聊项目", style: "scene", emotion: "melancholy", moodValue: 2, persona: "entrepreneur" },
+];
+
+// 情绪颜色映射
+export const EMOTION_COLORS: Record<MoodEmotion, string> = {
+  heavy: "rgba(90, 115, 180, 0.75)",      // 深蓝灰 — 更饱和
+  anxious: "rgba(160, 110, 200, 0.75)",    // 紫 — 更鲜明
+  tired: "rgba(180, 145, 100, 0.65)",      // 暖棕 — 更暖
+  numb: "rgba(130, 145, 165, 0.55)",       // 冷灰蓝
+  melancholy: "rgba(80, 160, 190, 0.7)",   // 青 — 更清冷
+  calm: "rgba(100, 145, 220, 0.7)",        // 蓝 — 更亮
+  hopeful: "rgba(220, 180, 80, 0.75)",     // 金 — 更暖亮
+  warm: "rgba(210, 140, 90, 0.75)",        // 橙 — 更鲜活
+  angry: "rgba(200, 80, 80, 0.75)",        // 红 — 愤怒
+  alive: "rgba(80, 190, 120, 0.75)",       // 绿 — 生机
+};
