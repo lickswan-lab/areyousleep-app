@@ -99,8 +99,9 @@ export const OCCUPATION_LABELS: Record<Occupation, string> = {
 };
 
 export const MENTAL_STATE_LABELS: Record<MentalState, string> = {
+  good: "心理良好", unsure: "不确定",
   "occasional-anxiety": "偶尔焦虑", "frequent-anxiety": "经常焦虑",
-  "suspected-condition": "疑似精神疾病", good: "心理良好", unsure: "不确定",
+  "suspected-condition": "疑似精神疾病",
 };
 
 export const CONCERN_LABELS: Record<Concern, string> = {
