@@ -2,7 +2,10 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
-import { DEEPSLEEP_LIMITS } from "@/lib/supabase";
+import {
+  DEEPSLEEP_LIMITS, isSupabaseConfigured,
+  signUpWithPhone, signInWithPhone, supabase,
+} from "@/lib/supabase";
 import { activateCode } from "@/lib/invite-codes";
 
 interface AuthPageProps {
@@ -11,18 +14,10 @@ interface AuthPageProps {
 }
 
 type AuthMode = "login" | "register" | "reset";
-type RegisterStep = "phone" | "verify" | "password"; // 注册三步
+type RegisterStep = "phone" | "verify" | "password";
 
-// 简单密码哈希（MVP，生产环境应用 bcrypt + 后端）
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + "chuangqian_salt_2026");
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-// 用户凭证存储
-const CREDENTIALS_KEY = "chuangqian_credentials"; // { phone: string, passwordHash: string }[]
+// 本地凭证存储（Supabase 不可用时的回退）
+const CREDENTIALS_KEY = "chuangqian_credentials";
 
 function getCredentials(): { phone: string; passwordHash: string }[] {
   if (typeof window === "undefined") return [];
@@ -38,6 +33,13 @@ function saveCredential(phone: string, passwordHash: string) {
   const creds = getCredentials().filter(c => c.phone !== phone);
   creds.push({ phone, passwordHash });
   localStorage.setItem(CREDENTIALS_KEY, JSON.stringify(creds));
+}
+
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password + "chuangqian_salt_2026");
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
 export default function AuthPage({ onClose, onSuccess }: AuthPageProps) {
@@ -129,10 +131,22 @@ export default function AuthPage({ onClose, onSuccess }: AuthPageProps) {
     if (!password || password.length < 6) { setError("请输入密码（至少6位）"); return; }
     setLoading(true); setError("");
     try {
-      const cred = findCredential(account);
-      if (!cred) { setError("该手机号未注册"); setLoading(false); return; }
-      const hash = await hashPassword(password);
-      if (hash !== cred.passwordHash) { setError("密码错误"); setLoading(false); return; }
+      if (isSupabaseConfigured) {
+        // Supabase Auth 登录
+        const { error: authError } = await signInWithPhone(account, password);
+        if (authError) {
+          // 回退到本地验证
+          const cred = findCredential(account);
+          if (!cred) { setError("手机号或密码错误"); setLoading(false); return; }
+          const hash = await hashPassword(password);
+          if (hash !== cred.passwordHash) { setError("密码错误"); setLoading(false); return; }
+        }
+      } else {
+        const cred = findCredential(account);
+        if (!cred) { setError("该手机号未注册"); setLoading(false); return; }
+        const hash = await hashPassword(password);
+        if (hash !== cred.passwordHash) { setError("密码错误"); setLoading(false); return; }
+      }
       completeLogin(account);
     } catch { setError("登录失败"); }
     finally { setLoading(false); }
@@ -141,23 +155,24 @@ export default function AuthPage({ onClose, onSuccess }: AuthPageProps) {
   // === 注册：步骤流 ===
   const handleRegisterNext = async () => {
     if (registerStep === "phone") {
-      // Step 1: 发送验证码
       if (!isPhone) { setError("请输入正确的手机号"); return; }
-      const cred = findCredential(account);
-      if (cred) { setError("该手机号已注册，请直接登录"); return; }
       await handleSendOtp();
       if (isPhone) setRegisterStep("verify");
     } else if (registerStep === "verify") {
-      // Step 2: 验证验证码
       const ok = await handleVerifyOtp();
       if (ok) setRegisterStep("password");
     } else if (registerStep === "password") {
-      // Step 3: 设置密码
       if (!password || password.length < 6) { setError("密码至少6位"); return; }
       if (password !== confirmPassword) { setError("两次密码不一致"); return; }
       if (!agreedToTerms) { setError("请先同意用户协议"); return; }
       setLoading(true); setError("");
       try {
+        // 同时注册到 Supabase 和本地
+        if (isSupabaseConfigured) {
+          const { error: authError } = await signUpWithPhone(account, password);
+          if (authError) console.error("Supabase signup:", authError.message);
+        }
+        // 本地也存一份（作为回退）
         const hash = await hashPassword(password);
         saveCredential(account, hash);
         completeLogin(account);
