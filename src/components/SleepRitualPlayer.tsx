@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { type SleepRitual, getStepTemplate } from "@/lib/sleep-ritual";
+import { getNoiseEngine } from "@/lib/white-noise";
 
 interface SleepRitualPlayerProps {
   ritual: SleepRitual;
@@ -83,7 +84,16 @@ export default function SleepRitualPlayer({ ritual, onStepAction, onComplete, on
 
       {/* 操作 */}
       <div className="px-5 pb-8 space-y-3">
-        <motion.button whileTap={{ scale: 0.95 }} onClick={() => onStepAction(step.type)}
+        <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
+              // 白噪音步骤：自动播放预设音效
+              if (step.type === "white-noise" && step.noiseTracks?.length) {
+                const engine = getNoiseEngine();
+                engine.stopAll();
+                step.noiseTracks.forEach(id => engine.toggle(id));
+                if (step.duration) engine.setTimer(step.duration);
+              }
+              onStepAction(step.type);
+            }}
           className="w-full py-4 rounded-full glass-heavy glow-sm text-accent text-base press-feedback">
           {template.available ? `开始${template.label}` : `${template.label}（即将上线）`}
         </motion.button>

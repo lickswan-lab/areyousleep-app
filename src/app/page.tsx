@@ -236,6 +236,53 @@ export default function Home() {
           <SleepToolsBlock onOpen={() => setOverlay("sleep-tools")} />
         </div>
 
+        {/* ===== 睡眠仪式入口 ===== */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="w-full rounded-2xl overflow-hidden relative mb-4"
+          style={{
+            height: "80px",
+            background: "linear-gradient(135deg, rgba(220,180,80,0.14), rgba(200,140,90,0.06))",
+            border: "1px solid rgba(220,180,80,0.12)",
+          }}
+        >
+          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none opacity-25"
+            style={{ background: "radial-gradient(circle, rgba(220,180,80,0.5), transparent 70%)" }} />
+          <div className="relative z-10 px-4 flex items-center justify-between h-full">
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                // 如果有活跃仪式直接开始，否则去编辑器
+                const { getActiveRitual: getActive } = require("@/lib/sleep-ritual");
+                const active = getActive();
+                if (active) {
+                  setPlayingRitual(active);
+                  setOverlay("ritual-player");
+                } else {
+                  setOverlay("ritual-editor");
+                }
+              }}
+              className="flex items-center gap-3 flex-1 text-left press-feedback"
+            >
+              <span className="text-2xl">✨</span>
+              <div>
+                <p className="text-warm-100 text-sm font-medium">开启睡眠仪式</p>
+                <p className="text-warm-300/35 text-[11px]">自定义你的专属睡前流程</p>
+              </div>
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setOverlay("ritual-editor")}
+              className="w-8 h-8 rounded-full flex items-center justify-center press-feedback shrink-0"
+              style={{ background: "rgba(220,180,80,0.15)" }}
+            >
+              <span className="text-warm-300/50 text-xs">⚙</span>
+            </motion.button>
+          </div>
+        </motion.div>
+
         {/* ===== 焦虑/灵感/思绪 入口 ===== */}
         <motion.button
           initial={{ opacity: 0, y: 20 }}
@@ -366,7 +413,6 @@ export default function Home() {
 
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { emoji: "✨", label: "我的仪式", sub: "自定义睡前流程", color: "rgba(220,180,80,0.7)", action: () => setOverlay("ritual-editor") },
                   { emoji: "🌬️", label: "4-7-8 呼吸", sub: "7 分钟 · 深度放松", color: "rgba(100,180,200,0.7)", action: () => setOverlay("breath-full") },
                   { emoji: "⚡", label: "快速呼吸", sub: "3 分钟 · 快速平静", color: "rgba(220,180,80,0.7)", action: () => setOverlay("breath-quick") },
                   { emoji: "🧘", label: "身体扫描", sub: "10 分钟 · 渐进放松", color: "rgba(140,180,140,0.7)", disabled: true, action: () => {} },

@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  type SleepRitual, type RitualStepType,
+  type SleepRitual, type RitualStep, type RitualStepType,
   getSleepRituals, createRitual, updateRitual, deleteRitual,
   setActiveRitual, getActiveRitualId,
   canCreateRitual, getRitualLimit,
   STEP_TEMPLATES, getStepTemplate,
   removeStepFromRitual, addStepToRitual,
 } from "@/lib/sleep-ritual";
+import { NOISE_TRACKS } from "@/lib/white-noise";
 
 interface SleepRitualEditorProps {
   onStartRitual: (ritual: SleepRitual) => void;
@@ -83,7 +84,8 @@ export default function SleepRitualEditor({ onStartRitual, onClose }: SleepRitua
             {editingRitual.steps.map((step, i) => {
               const t = getStepTemplate(step.type);
               return (
-                <motion.div key={step.id} layout className="flex items-center gap-3 glass rounded-xl p-3">
+                <motion.div key={step.id} layout className="glass rounded-xl p-3">
+                  <div className="flex items-center gap-3">
                   <span className="text-warm-300/20 text-xs w-5 text-center shrink-0">{i + 1}</span>
                   <span className="text-lg shrink-0">{t.emoji}</span>
                   <div className="flex-1 min-w-0">
@@ -106,6 +108,47 @@ export default function SleepRitualEditor({ onStartRitual, onClose }: SleepRitua
                   </div>
                   <button onClick={() => { removeStepFromRitual(editingRitual.id, step.id); refreshEditing(); }}
                     className="text-warm-300/20 text-xs press-feedback shrink-0">×</button>
+                  </div>
+
+                  {/* 白噪音步骤：预设音效选择 */}
+                  {step.type === "white-noise" && (
+                    <div className="mt-2 pt-2 border-t border-warm-300/06">
+                      <p className="text-warm-300/30 text-[10px] mb-1.5 ml-8">预设音效（最多3种）</p>
+                      <div className="flex flex-wrap gap-1.5 ml-8">
+                        {NOISE_TRACKS.map((track) => {
+                          const selected = step.noiseTracks?.includes(track.id);
+                          const canSelect = (step.noiseTracks?.length || 0) < 3 || selected;
+                          return (
+                            <button
+                              key={track.id}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const current = step.noiseTracks || [];
+                                const updated = selected
+                                  ? current.filter(id => id !== track.id)
+                                  : canSelect ? [...current, track.id] : current;
+                                const steps = editingRitual.steps.map(s =>
+                                  s.id === step.id ? { ...s, noiseTracks: updated } : s
+                                );
+                                updateRitual(editingRitual.id, { steps });
+                                refreshEditing();
+                              }}
+                              disabled={!canSelect}
+                              className={`px-2 py-1 rounded-lg text-[10px] press-feedback transition-all
+                                ${selected ? "text-warm-100" : "text-warm-300/35"}
+                                ${!canSelect ? "opacity-30" : ""}`}
+                              style={{
+                                background: selected ? "rgba(160,140,200,0.2)" : "rgba(255,255,255,0.03)",
+                                boxShadow: selected ? "0 0 0 1px rgba(160,140,200,0.3)" : undefined,
+                              }}
+                            >
+                              {track.emoji} {track.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}

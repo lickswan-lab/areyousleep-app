@@ -20,6 +20,7 @@ export interface RitualStep {
   type: RitualStepType;
   duration?: number;
   label?: string;
+  noiseTracks?: string[]; // 白噪音步骤预设的音效ID列表
 }
 
 export interface SleepRitual {
