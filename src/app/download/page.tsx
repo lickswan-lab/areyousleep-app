@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "睡了么 — 你的睡前情绪仪式",
+  title: "床前 — 你的睡前情绪仪式",
   description: "不是白噪音，不是冥想。帮你在睡前把脑子里的事清空，和睡不着这件事和解。",
 };
 
@@ -18,7 +18,7 @@ export default function DownloadPage() {
 
         <div className="relative z-10">
           <p className="text-6xl mb-6">🌙</p>
-          <h1 className="text-4xl font-light mb-4 tracking-wide">睡了么</h1>
+          <h1 className="text-4xl font-light mb-4 tracking-wide">床前</h1>
           <p className="text-[#d4be96]/60 text-lg mb-2">你的睡前情绪仪式</p>
           <p className="text-[#d4be96]/30 text-sm max-w-xs mx-auto leading-relaxed mb-10">
             不是白噪音，不是冥想。<br />
@@ -44,7 +44,7 @@ export default function DownloadPage() {
 
       {/* 功能介绍 */}
       <section className="px-6 py-20 max-w-lg mx-auto">
-        <h2 className="text-2xl font-light text-center mb-12">为什么是「睡了么」</h2>
+        <h2 className="text-2xl font-light text-center mb-12">为什么是「床前」</h2>
 
         <div className="space-y-12">
           {[
@@ -92,7 +92,7 @@ export default function DownloadPage() {
 
       {/* 用户画像 */}
       <section className="px-6 py-16 max-w-lg mx-auto">
-        <h2 className="text-xl font-light text-center mb-8">谁在用「睡了么」</h2>
+        <h2 className="text-xl font-light text-center mb-8">谁在用「床前」</h2>
         <div className="grid grid-cols-3 gap-3 text-center">
           {[
             { emoji: "📚", label: "中学生" },
@@ -124,7 +124,7 @@ export default function DownloadPage() {
 
       {/* Footer */}
       <footer className="px-6 py-8 text-center border-t border-[#d4be96]/5">
-        <p className="text-[#d4be96]/20 text-xs">© 2026 睡了么 · 你的睡前情绪仪式</p>
+        <p className="text-[#d4be96]/20 text-xs">© 2026 床前 · 你的睡前情绪仪式</p>
       </footer>
     </main>
   );

@@ -59,7 +59,7 @@ function StarsDecoration() {
 function Watermark() {
   return (
     <div className="mt-4 flex items-center justify-end">
-      <span className="text-warm-300/30 text-xs tracking-widest">睡了么</span>
+      <span className="text-warm-300/30 text-xs tracking-widest">床前</span>
     </div>
   );
 }
@@ -391,7 +391,7 @@ export default function MoodSummaryCard({ period, onClose }: MoodSummaryCardProp
       });
       const link = document.createElement("a");
       const periodLabel = period === "week" ? "周" : period === "month" ? "月" : "年";
-      link.download = `睡了么心情${periodLabel}报.png`;
+      link.download = `床前心情${periodLabel}报.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch {

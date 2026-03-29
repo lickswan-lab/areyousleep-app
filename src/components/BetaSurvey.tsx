@@ -122,7 +122,7 @@ export default function BetaSurvey({ onClose, onDefer }: BetaSurveyProps) {
         >
           <span className="text-4xl block mb-4">💜</span>
           <h2 className="text-xl font-light text-warm-100 mb-2">谢谢你的反馈</h2>
-          <p className="text-warm-300/40 text-sm mb-8">你的每一条建议都会让睡了么变得更好</p>
+          <p className="text-warm-300/40 text-sm mb-8">你的每一条建议都会让床前变得更好</p>
           <button
             onClick={onClose}
             className="px-8 py-3 rounded-full glass-heavy glow-sm text-accent text-sm press-feedback"

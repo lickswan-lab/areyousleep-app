@@ -212,7 +212,7 @@ export default function AuthPage({ onClose, onSuccess }: AuthPageProps) {
         {/* Logo */}
         <div className="text-center mb-6">
           <span className="text-3xl mb-3 block">🌙</span>
-          <h1 className="text-2xl font-light text-warm-100">睡了么</h1>
+          <h1 className="text-2xl font-light text-warm-100">床前</h1>
         </div>
 
         {/* Mode tabs */}
@@ -391,7 +391,7 @@ function TermsContent() {
 
       <section className="space-y-3">
         <h2 className="text-warm-100 text-base font-medium">一、服务协议</h2>
-        <p>欢迎使用「睡了么」（以下简称"本应用"）。本应用由睡了么团队（以下简称"我们"）开发和运营。请您在使用本应用前仔细阅读本协议。</p>
+        <p>欢迎使用「床前」（以下简称"本应用"）。本应用由床前团队（以下简称"我们"）开发和运营。请您在使用本应用前仔细阅读本协议。</p>
         <p>1.1 本应用是一款睡前情绪管理工具，旨在帮助用户在睡前进行情绪记录、认知卸载和放松引导。本应用不提供医疗诊断、心理治疗或药物建议。</p>
         <p>1.2 如果您正在经历严重的睡眠障碍、心理健康问题或有自我伤害的想法，请及时寻求专业的医疗或心理帮助。全国24小时心理援助热线：400-161-9995。</p>
         <p>1.3 您需要年满14周岁方可注册使用本应用。14-18周岁的用户应在监护人知情同意下使用。</p>
@@ -464,7 +464,7 @@ function TermsContent() {
         <p>邮箱：support@sleepme.app</p>
       </section>
 
-      <p className="text-warm-300/30 text-xs text-center pt-4">© 2026 睡了么 保留所有权利</p>
+      <p className="text-warm-300/30 text-xs text-center pt-4">© 2026 床前 保留所有权利</p>
     </div>
   );
 }

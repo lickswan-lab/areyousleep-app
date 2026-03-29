@@ -31,7 +31,7 @@ export async function analyzeWorry(content: string): Promise<WorryAnalysis> {
         messages: [
           {
             role: "system",
-            content: `你是「睡了么」App 的睡前助手。用户在睡前写下了让他们担心的事。
+            content: `你是「床前」App 的睡前助手。用户在睡前写下了让他们担心的事。
 
 你的任务：
 1. 将担忧分类为以下之一：work（工作学业）、relationship（人际关系）、health（身体健康）、future（未来规划）、self（自我评价）、uncontrollable（不可控的事）、other

@@ -2,13 +2,13 @@ import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "睡了么 — 今晚，把脑子里的事放下",
+  title: "床前 — 今晚，把脑子里的事放下",
   description: "你的睡前情绪仪式",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "睡了么",
+    title: "床前",
   },
 };
 

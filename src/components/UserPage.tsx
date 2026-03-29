@@ -6,7 +6,9 @@ import { getUserSettings, updateUserSettings, PERSONA_LABELS, type UserSettings,
 import MoodProfile from "./MoodProfile";
 import WeeklyReport from "./WeeklyReport";
 import AuthPage, { DeepSleepPage } from "./AuthPage";
+import OnboardingQuestionnaire from "./OnboardingQuestionnaire";
 import { isDeepSleep } from "@/lib/supabase";
+import { updateUserProfile } from "@/lib/profile";
 
 interface UserPageProps {
   onClose: () => void;
@@ -16,7 +18,7 @@ type Tab = "mood" | "report" | "account" | "settings";
 
 export default function UserPage({ onClose }: UserPageProps) {
   const [tab, setTab] = useState<Tab>("mood");
-  const [subOverlay, setSubOverlay] = useState<"mood-detail" | "report-detail" | "auth" | "deepsleep" | null>(null);
+  const [subOverlay, setSubOverlay] = useState<"mood-detail" | "report-detail" | "auth" | "deepsleep" | "questionnaire" | null>(null);
 
   // Sub-overlays for full-screen views
   if (subOverlay === "mood-detail") {
@@ -30,6 +32,9 @@ export default function UserPage({ onClose }: UserPageProps) {
   }
   if (subOverlay === "deepsleep") {
     return <DeepSleepPage onClose={() => setSubOverlay(null)} />;
+  }
+  if (subOverlay === "questionnaire") {
+    return <OnboardingQuestionnaire onComplete={() => setSubOverlay(null)} />;
   }
 
   return (
@@ -181,7 +186,7 @@ export default function UserPage({ onClose }: UserPageProps) {
               exit={{ opacity: 0 }}
               className="flex-1"
             >
-              <SettingsView />
+              <SettingsView onOpenQuestionnaire={() => setSubOverlay("questionnaire")} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -334,7 +339,7 @@ function AccountView({ onOpenAuth, onOpenDeepSleep }: { onOpenAuth: () => void; 
 }
 
 // ===== 设置 =====
-function SettingsView() {
+function SettingsView({ onOpenQuestionnaire }: { onOpenQuestionnaire: () => void }) {
   const [settings, setSettings] = useState<UserSettings>(getUserSettings());
   const [customInput, setCustomInput] = useState("");
 
@@ -375,24 +380,26 @@ function SettingsView() {
         />
       </div>
 
-      {/* 身份 */}
+      {/* 身份设定 */}
       <div className="glass-md rounded-2xl p-5 space-y-3">
-        <p className="text-warm-200/60 text-sm">我是</p>
-        <p className="text-warm-300/30 text-xs">选择后会看到更贴近你的心情描述</p>
-        <div className="flex flex-wrap gap-2 pt-1">
-          {(Object.entries(PERSONA_LABELS) as [UserPersona, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => save({ persona: key })}
-              className={`px-3.5 py-2 rounded-full text-xs transition-all press-feedback
-                ${settings.persona === key
-                  ? "glass-heavy text-warm-100 glow-sm"
-                  : "glass text-warm-300/50"
-                }`}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-warm-200/60 text-sm">身份设定</p>
+            <p className="text-warm-300/30 text-xs mt-1">
+              {settings.persona && settings.persona !== "general"
+                ? `当前：${PERSONA_LABELS[settings.persona]}`
+                : "未设置"}
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              updateUserProfile({ completedAt: undefined } as any);
+              onOpenQuestionnaire();
+            }}
+            className="text-accent/70 text-xs px-4 py-2 rounded-full glass press-feedback"
+          >
+            重新设定
+          </button>
         </div>
       </div>
 
@@ -434,6 +441,28 @@ function SettingsView() {
         <p className="text-warm-300/25 text-xs text-center">
           当前：{String(settings.sleepStartHour).padStart(2, "0")}:00 → {String(settings.sleepEndHour).padStart(2, "0")}:00
         </p>
+      </div>
+
+      {/* 全时段模式 */}
+      <div className="glass-md rounded-2xl p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-warm-200/60 text-sm">全时段睡眠仪式</p>
+            <p className="text-warm-300/30 text-xs mt-1">开启后，随时可以使用完整的睡前功能</p>
+          </div>
+          <button
+            onClick={() => save({ allDayMode: !settings.allDayMode })}
+            className={`w-12 h-7 rounded-full transition-all relative ${
+              settings.allDayMode ? "bg-accent/60" : "bg-night-600/50"
+            }`}
+          >
+            <div
+              className={`absolute top-0.5 w-6 h-6 rounded-full bg-warm-100 shadow transition-all ${
+                settings.allDayMode ? "left-[22px]" : "left-0.5"
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* 自定义心情 */}

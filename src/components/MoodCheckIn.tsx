@@ -9,6 +9,7 @@ import {
 } from "@/lib/store";
 import { MOOD_DESCRIPTIONS, EMOTION_COLORS, type MoodDescription, type MoodEmotion } from "@/lib/mood-descriptions";
 import { DAY_MOOD_DESCRIPTIONS } from "@/lib/day-mood-descriptions";
+import { getUserProfile, getProfileTags } from "@/lib/profile";
 
 interface MoodCheckInProps {
   onComplete: (mood: number, action: "worry" | "breathe" | "goodnight", emotion?: MoodEmotion) => void;
@@ -83,15 +84,28 @@ export default function MoodCheckIn({ onComplete }: MoodCheckInProps) {
   const getPool = (): MoodDescription[] => {
     const night = isNightTime();
     const settings = getUserSettings();
-    const persona = settings.persona || "general";
+    const profileTags = getProfileTags();
     const base = night ? MOOD_DESCRIPTIONS : (DAY_MOOD_DESCRIPTIONS as MoodDescription[]);
-    // 筛选：通用 + 匹配画像的
-    const filtered = base.filter((d) => !d.persona || d.persona === "general" || d.persona === persona);
-    // 加入自定义
+
+    // Tag-based scoring instead of persona filtering
+    const scored = base.map(d => {
+      let score = 1; // base score for untagged
+      if (d.tags && d.tags.length > 0) {
+        const matches = d.tags.filter(t => profileTags.includes(t)).length;
+        score = matches > 0 ? 1 + matches * 0.5 : 0.3;
+      }
+      return { ...d, _score: score };
+    });
+
+    // Sort by score with randomization, then strip score
+    scored.sort((a, b) => b._score - a._score + (Math.random() - 0.5) * 0.3);
+
+    // Add custom moods
     const custom: MoodDescription[] = (settings.customMoods || []).map((text, i) => ({
       id: `custom-${i}`, text, style: "direct" as const, emotion: "calm" as MoodEmotion, moodValue: 3,
     }));
-    return [...filtered, ...custom];
+
+    return [...scored, ...custom];
   };
 
   const fallbackPick = () => {

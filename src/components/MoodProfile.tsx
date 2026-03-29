@@ -205,7 +205,7 @@ function DayShareCard({ entry, cardRef }: { entry: MoodEntry; cardRef: React.Ref
         {/* Bottom: watermark */}
         <div className="flex items-center justify-between">
           <div />
-          <p className="text-warm-300/15 text-xs tracking-[0.3em]">睡了么</p>
+          <p className="text-warm-300/15 text-xs tracking-[0.3em]">床前</p>
         </div>
       </div>
     </div>
@@ -252,7 +252,7 @@ function TimelineEntry({ entry: initialEntry }: { entry: MoodEntry }) {
         useCORS: true,
       });
       const link = document.createElement("a");
-      link.download = `睡了么心情-${entry.date}.png`;
+      link.download = `床前心情-${entry.date}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch { /* fallback */ } finally {

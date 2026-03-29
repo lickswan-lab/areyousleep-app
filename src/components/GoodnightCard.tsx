@@ -159,7 +159,7 @@ export default function GoodnightCard({ mood, emotion, onClose }: GoodnightCardP
             className="absolute bottom-6 right-7"
           >
             <span className="text-warm-300/15 text-xs tracking-[0.3em]">
-              睡了么
+              床前
             </span>
           </motion.div>
         </div>

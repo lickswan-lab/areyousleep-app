@@ -69,7 +69,7 @@ export default function WeeklyReport({ onClose }: WeeklyReportProps) {
         useCORS: true,
       });
       const link = document.createElement("a");
-      link.download = `睡了么周报-${stats?.dateRange || "本周"}.png`;
+      link.download = `床前周报-${stats?.dateRange || "本周"}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch { /* silent */ } finally { setSaving(false); }
@@ -259,7 +259,7 @@ export default function WeeklyReport({ onClose }: WeeklyReportProps) {
               transition={{ delay: 1 }}
               className="mt-4 flex items-center justify-end"
             >
-              <span className="text-warm-300/20 text-xs tracking-[0.3em]">睡了么</span>
+              <span className="text-warm-300/20 text-xs tracking-[0.3em]">床前</span>
             </motion.div>
           </div>
         </motion.div>

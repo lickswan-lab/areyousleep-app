@@ -524,6 +524,7 @@ export interface UserSettings {
   customMoods: string[];
   favoriteMoods: string[];  // 收藏的情绪描述ID
   refreshCount: number;     // 连续刷新计数（用于触发自定义提示）
+  allDayMode?: boolean;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -571,10 +572,94 @@ export function updateUserSettings(updates: Partial<UserSettings>): void {
 }
 
 export function isNightTime(): boolean {
-  const { sleepStartHour, sleepEndHour } = getUserSettings();
+  const settings = getUserSettings();
+  if (settings.allDayMode) return true;
+  const { sleepStartHour, sleepEndHour } = settings;
   const hour = new Date().getHours();
   if (sleepStartHour > sleepEndHour) {
     return hour >= sleepStartHour || hour < sleepEndHour;
   }
   return hour >= sleepStartHour && hour < sleepEndHour;
+}
+
+// ===== 灵感记录 =====
+export interface Inspiration {
+  id: string;
+  content: string;
+  createdAt: string;
+}
+
+const INSPIRATIONS_KEY = "chuangqian_inspirations";
+
+export function getInspirations(): Inspiration[] {
+  if (typeof window === "undefined") return [];
+  const data = localStorage.getItem(INSPIRATIONS_KEY);
+  return data ? JSON.parse(data) : [];
+}
+
+export function getTonightInspirations(): Inspiration[] {
+  const today = new Date().toDateString();
+  return getInspirations().filter(i => new Date(i.createdAt).toDateString() === today);
+}
+
+export function addInspiration(content: string): Inspiration {
+  const entry: Inspiration = { id: generateId(), content, createdAt: new Date().toISOString() };
+  const all = getInspirations();
+  all.unshift(entry);
+  localStorage.setItem(INSPIRATIONS_KEY, JSON.stringify(all));
+  return entry;
+}
+
+export function deleteInspiration(id: string): void {
+  const all = getInspirations().filter(i => i.id !== id);
+  localStorage.setItem(INSPIRATIONS_KEY, JSON.stringify(all));
+}
+
+// ===== 思绪日记 =====
+export interface Thought {
+  id: string;
+  content: string;
+  createdAt: string;
+}
+
+const THOUGHTS_KEY = "chuangqian_thoughts";
+
+export function getThoughts(): Thought[] {
+  if (typeof window === "undefined") return [];
+  const data = localStorage.getItem(THOUGHTS_KEY);
+  return data ? JSON.parse(data) : [];
+}
+
+export function getTonightThoughts(): Thought[] {
+  const today = new Date().toDateString();
+  return getThoughts().filter(t => new Date(t.createdAt).toDateString() === today);
+}
+
+export function addThought(content: string): Thought {
+  const entry: Thought = { id: generateId(), content, createdAt: new Date().toISOString() };
+  const all = getThoughts();
+  all.unshift(entry);
+  localStorage.setItem(THOUGHTS_KEY, JSON.stringify(all));
+  return entry;
+}
+
+export function deleteThought(id: string): void {
+  const all = getThoughts().filter(t => t.id !== id);
+  localStorage.setItem(THOUGHTS_KEY, JSON.stringify(all));
+}
+
+// ===== 情绪日历数据 =====
+export function getRecentMoodByDay(days: number): { date: string; emotion: string | null }[] {
+  const entries = getMoodEntries();
+  const result: { date: string; emotion: string | null }[] = [];
+  const now = new Date();
+
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().slice(0, 10);
+    const dayEntry = entries.find(e => e.date === dateStr);
+    result.push({ date: dateStr, emotion: dayEntry?.emotion || null });
+  }
+  return result;
 }
