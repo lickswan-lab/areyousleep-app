@@ -27,6 +27,8 @@ import EmotionCardDetail from "@/components/EmotionCardDetail";
 import SleepRitualEditor from "@/components/SleepRitualEditor";
 import GuidedAudioPlayer from "@/components/GuidedAudioPlayer";
 import SleepRitualPlayer from "@/components/SleepRitualPlayer";
+import EmotionGallery from "@/components/EmotionGallery";
+import NightSquare from "@/components/NightSquare";
 import { isProfileComplete } from "@/lib/profile";
 import type { EmotionCard } from "@/lib/emotion-cards";
 import type { SleepRitual } from "@/lib/sleep-ritual";
@@ -62,7 +64,9 @@ type Overlay =
   | "guide-body-scan"  // 身体扫描引导
   | "guide-meditation" // 潮汐冥想引导
   | "guide-muscle"     // 肌肉放松引导
-  | "guide-story";     // 睡前故事
+  | "guide-story"      // 睡前故事
+  | "emotion-gallery"  // 情绪画廊
+  | "night-square";    // 深夜广场
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -323,7 +327,27 @@ export default function Home() {
         {/* ===== 情绪日历 ===== */}
         <MoodCalendar />
 
-        {/* 底部留白 */}
+        {/* ===== 底部入口 ===== */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="flex gap-3 mb-4"
+        >
+          <button onClick={() => setOverlay("emotion-gallery")}
+            className="flex-1 py-3 rounded-2xl flex items-center justify-center gap-2 press-feedback"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <span className="text-sm">🎨</span>
+            <span className="text-warm-300/40 text-xs">情绪画廊</span>
+          </button>
+          <button onClick={() => setOverlay("night-square")}
+            className="flex-1 py-3 rounded-2xl flex items-center justify-center gap-2 press-feedback"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <span className="text-sm">🌃</span>
+            <span className="text-warm-300/40 text-xs">深夜广场</span>
+          </button>
+        </motion.div>
+
         <div className="h-4" />
       </div>
 
@@ -562,6 +586,16 @@ export default function Home() {
             onClose={() => setOverlay("sleep-tools")}
           />
         )}
+      </AnimatePresence>
+
+      {/* 情绪画廊 */}
+      <AnimatePresence>
+        {overlay === "emotion-gallery" && <EmotionGallery onClose={() => setOverlay(null)} />}
+      </AnimatePresence>
+
+      {/* 深夜广场 */}
+      <AnimatePresence>
+        {overlay === "night-square" && <NightSquare onClose={() => setOverlay(null)} />}
       </AnimatePresence>
 
       {/* 白噪音侧边面板 */}
