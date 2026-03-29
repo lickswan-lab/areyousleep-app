@@ -241,15 +241,18 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.18 }}
-          className="w-full rounded-2xl overflow-hidden relative mb-4"
+          className="w-full rounded-3xl overflow-hidden relative mb-4"
           style={{
-            height: "80px",
-            background: "linear-gradient(135deg, rgba(220,180,80,0.14), rgba(200,140,90,0.06))",
-            border: "1px solid rgba(220,180,80,0.12)",
+            height: "76px",
+            background: "linear-gradient(135deg, rgba(220,180,80,0.12), rgba(200,160,100,0.04))",
+            border: "1px solid rgba(220,180,80,0.1)",
           }}
         >
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none opacity-25"
-            style={{ background: "radial-gradient(circle, rgba(220,180,80,0.5), transparent 70%)" }} />
+          <motion.div
+            animate={{ opacity: [0.15, 0.25, 0.15] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="absolute -top-8 -left-8 w-28 h-28 rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(circle, rgba(220,180,80,0.3), transparent 70%)" }} />
           <div className="relative z-10 px-4 flex items-center justify-between h-full">
             <motion.button
               whileTap={{ scale: 0.97 }}
@@ -290,15 +293,18 @@ export default function Home() {
           transition={{ delay: 0.2 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => setOverlay("thoughts")}
-          className="w-full rounded-2xl text-left press-feedback overflow-hidden relative mb-4"
+          className="w-full rounded-3xl text-left press-feedback overflow-hidden relative mb-4"
           style={{
-            height: "100px",
-            background: "linear-gradient(135deg, rgba(180,145,100,0.1), rgba(140,160,200,0.06))",
+            height: "90px",
+            background: "linear-gradient(160deg, rgba(180,145,100,0.1), rgba(120,140,180,0.05))",
             border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
-          <div className="absolute -bottom-6 -right-6 w-20 h-20 rounded-full pointer-events-none opacity-20"
-            style={{ background: "radial-gradient(circle, rgba(180,145,100,0.5), transparent 70%)" }} />
+          <motion.div
+            animate={{ opacity: [0.1, 0.18, 0.1] }}
+            transition={{ duration: 5, repeat: Infinity }}
+            className="absolute -bottom-8 -right-8 w-28 h-28 rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(circle, rgba(180,145,100,0.3), transparent 70%)" }} />
           <div className="relative z-10 p-4 flex items-center justify-between h-full">
             <div>
               <span className="text-xl block mb-1.5">📦</span>
