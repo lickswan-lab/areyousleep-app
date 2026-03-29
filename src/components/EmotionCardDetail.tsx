@@ -18,10 +18,15 @@ interface Question {
   options: string[];
 }
 
-type Phase = "loading" | "questions" | "counseling" | "action";
+type Phase = "loading" | "questions" | "counseling" | "personalized-guide" | "action";
 
 export default function EmotionCardDetail({ card, onComplete, onClose }: EmotionCardDetailProps) {
   const [phase, setPhase] = useState<Phase>("loading");
+  const [guideText, setGuideText] = useState("");
+  const [guideAudio, setGuideAudio] = useState<string | null>(null);
+  const [guideLoading, setGuideLoading] = useState(false);
+  const [isPlayingGuide, setIsPlayingGuide] = useState(false);
+  const guideAudioRef = { current: null as HTMLAudioElement | null };
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -130,10 +135,54 @@ export default function EmotionCardDetail({ card, onComplete, onClose }: Emotion
   };
 
   const handleConfirm = () => {
-    // Record mood entry
     const moodVal = moodValueMap[card.emotion] || 3;
     addMoodEntry(moodVal, card.name, card.emotion);
-    setPhase("action");
+    // 生成个性化引导
+    generatePersonalizedGuide();
+  };
+
+  const generatePersonalizedGuide = async () => {
+    setGuideLoading(true);
+    setPhase("personalized-guide");
+    const profile = getUserProfile();
+    const profileContext = [profile.ageRange, profile.occupation, profile.concerns?.join("、")].filter(Boolean).join("，");
+
+    try {
+      const res = await fetch("/api/personalized-guide", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          emotion: card.emotion,
+          cardName: card.name,
+          answers,
+          profileContext,
+        }),
+      });
+      const data = await res.json();
+      setGuideText(data.text || "");
+      if (data.audio) {
+        setGuideAudio(`data:audio/mpeg;base64,${data.audio}`);
+      }
+    } catch {
+      setGuideText("深深地吸一口气...慢慢呼出来...今晚的一切都可以放下了。晚安。");
+    } finally {
+      setGuideLoading(false);
+    }
+  };
+
+  const playGuideAudio = () => {
+    if (!guideAudio) return;
+    if (guideAudioRef.current) {
+      guideAudioRef.current.pause();
+      guideAudioRef.current = null;
+      setIsPlayingGuide(false);
+      return;
+    }
+    const audio = new Audio(guideAudio);
+    guideAudioRef.current = audio;
+    audio.play().catch(() => {});
+    setIsPlayingGuide(true);
+    audio.onended = () => { setIsPlayingGuide(false); guideAudioRef.current = null; };
   };
 
   const handleAction = (action: "worry" | "breathe" | "goodnight") => {
@@ -303,6 +352,71 @@ export default function EmotionCardDetail({ card, onComplete, onClose }: Emotion
                       }}
                     >
                       记录这张卡片为今日情绪
+                    </motion.button>
+                  </>
+                )}
+              </motion.div>
+            )}
+
+            {/* Personalized guide */}
+            {phase === "personalized-guide" && (
+              <motion.div key="guide"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                className="text-center">
+
+                {guideLoading ? (
+                  <div>
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.8, 0.3] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="text-4xl mb-6 inline-block">
+                      🌙
+                    </motion.div>
+                    <p className="text-warm-100 text-base mb-2">正在为你编织今晚的引导...</p>
+                    <p className="text-warm-300/30 text-xs">每一晚都是独一无二的</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Guide text */}
+                    <div className="mb-6 rounded-2xl p-5 text-left max-h-[40vh] overflow-y-auto"
+                      style={{
+                        background: `linear-gradient(135deg, ${colorLight}, rgba(255,255,255,0.02))`,
+                        border: `1px solid ${color.replace(/[\d.]+\)$/, "0.1)")}`,
+                      }}>
+                      <p className="text-warm-100 text-sm leading-[2] whitespace-pre-line">
+                        {guideText}
+                      </p>
+                    </div>
+
+                    {/* Audio player */}
+                    {guideAudio && (
+                      <motion.button
+                        whileTap={{ scale: 0.95 }}
+                        onClick={playGuideAudio}
+                        className="mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center press-feedback"
+                        style={{
+                          background: isPlayingGuide
+                            ? `linear-gradient(135deg, ${color.replace(/[\d.]+\)$/, "0.3)")}, ${colorLight})`
+                            : colorLight,
+                          boxShadow: isPlayingGuide ? `0 0 24px ${color.replace(/[\d.]+\)$/, "0.2)")}` : undefined,
+                          border: `1px solid ${color.replace(/[\d.]+\)$/, "0.2)")}`,
+                        }}
+                      >
+                        <span className="text-2xl">{isPlayingGuide ? "⏸" : "▶"}</span>
+                      </motion.button>
+                    )}
+                    <p className="text-warm-300/30 text-xs mb-6">
+                      {guideAudio ? (isPlayingGuide ? "正在播放你的专属引导" : "点击播放语音引导") : "今晚的专属引导"}
+                    </p>
+
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        if (guideAudioRef.current) { guideAudioRef.current.pause(); guideAudioRef.current = null; }
+                        setPhase("action");
+                      }}
+                      className="px-8 py-3 rounded-full glass text-warm-200/60 text-sm press-feedback">
+                      继续
                     </motion.button>
                   </>
                 )}
