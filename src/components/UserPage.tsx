@@ -341,8 +341,6 @@ function AccountView({ onOpenAuth, onOpenDeepSleep }: { onOpenAuth: () => void; 
 // ===== 设置 =====
 function SettingsView({ onOpenQuestionnaire }: { onOpenQuestionnaire: () => void }) {
   const [settings, setSettings] = useState<UserSettings>(getUserSettings());
-  const [customInput, setCustomInput] = useState("");
-
   useEffect(() => {
     setSettings(getUserSettings());
   }, []);
@@ -350,17 +348,6 @@ function SettingsView({ onOpenQuestionnaire }: { onOpenQuestionnaire: () => void
   const save = (updates: Partial<UserSettings>) => {
     updateUserSettings(updates);
     setSettings({ ...settings, ...updates });
-  };
-
-  const addCustomMood = () => {
-    const text = customInput.trim();
-    if (!text || settings.customMoods.includes(text)) return;
-    save({ customMoods: [...settings.customMoods, text] });
-    setCustomInput("");
-  };
-
-  const removeCustomMood = (text: string) => {
-    save({ customMoods: settings.customMoods.filter((m) => m !== text) });
   };
 
   return (
@@ -465,54 +452,6 @@ function SettingsView({ onOpenQuestionnaire }: { onOpenQuestionnaire: () => void
         </div>
       </div>
 
-      {/* 自定义心情 */}
-      <div className="glass-md rounded-2xl p-5 space-y-4">
-        <p className="text-warm-200/60 text-sm">自定义心情描述</p>
-        <p className="text-warm-300/30 text-xs">添加属于你自己的心情描述，它们会出现在签到卡片中</p>
-
-        {/* 已添加的 */}
-        {settings.customMoods.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {settings.customMoods.map((text) => (
-              <span
-                key={text}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass text-warm-200/70 text-xs"
-              >
-                {text}
-                <button
-                  onClick={() => removeCustomMood(text)}
-                  className="text-warm-300/30 hover:text-warm-300/60 ml-0.5"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* 输入新的 */}
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={customInput}
-            onChange={(e) => setCustomInput(e.target.value.slice(0, 50))}
-            placeholder="写一个你的心情..."
-            maxLength={50}
-            onKeyDown={(e) => e.key === "Enter" && addCustomMood()}
-            className="flex-1 bg-transparent text-warm-100 text-sm
-                       placeholder:text-warm-300/25 focus:outline-none
-                       border-b border-warm-300/10 pb-2"
-          />
-          <button
-            onClick={addCustomMood}
-            disabled={!customInput.trim()}
-            className="text-accent text-sm px-3 py-1 rounded-full glass press-feedback
-                       disabled:opacity-30"
-          >
-            添加
-          </button>
-        </div>
-      </div>
 
     </div>
   );

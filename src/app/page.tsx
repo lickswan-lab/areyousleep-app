@@ -25,6 +25,7 @@ import MoodCalendar from "@/components/MoodCalendar";
 import EmotionCardList from "@/components/EmotionCardList";
 import EmotionCardDetail from "@/components/EmotionCardDetail";
 import SleepRitualEditor from "@/components/SleepRitualEditor";
+import GuidedAudioPlayer from "@/components/GuidedAudioPlayer";
 import SleepRitualPlayer from "@/components/SleepRitualPlayer";
 import { isProfileComplete } from "@/lib/profile";
 import type { EmotionCard } from "@/lib/emotion-cards";
@@ -57,7 +58,11 @@ type Overlay =
   | "sleep-tools"      // 助眠工具详情
   | "thoughts"         // 思绪容器详情
   | "ritual-editor"    // 睡眠仪式编辑
-  | "ritual-player";   // 睡眠仪式执行
+  | "ritual-player"    // 睡眠仪式执行
+  | "guide-body-scan"  // 身体扫描引导
+  | "guide-meditation" // 潮汐冥想引导
+  | "guide-muscle"     // 肌肉放松引导
+  | "guide-story";     // 睡前故事
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -421,11 +426,11 @@ export default function Home() {
                 {[
                   { emoji: "🌬️", label: "4-7-8 呼吸", sub: "7 分钟 · 深度放松", color: "rgba(100,180,200,0.7)", action: () => setOverlay("breath-full") },
                   { emoji: "⚡", label: "快速呼吸", sub: "3 分钟 · 快速平静", color: "rgba(220,180,80,0.7)", action: () => setOverlay("breath-quick") },
-                  { emoji: "🧘", label: "身体扫描", sub: "10 分钟 · 渐进放松", color: "rgba(140,180,140,0.7)", disabled: true, action: () => {} },
-                  { emoji: "🌊", label: "潮汐冥想", sub: "15 分钟 · 海浪引导", color: "rgba(100,145,220,0.7)", disabled: true, action: () => {} },
+                  { emoji: "🧘", label: "身体扫描", sub: "3 分钟 · 渐进放松", color: "rgba(140,180,140,0.7)", action: () => setOverlay("guide-body-scan") },
+                  { emoji: "🌊", label: "潮汐冥想", sub: "3 分钟 · 海浪引导", color: "rgba(100,145,220,0.7)", action: () => setOverlay("guide-meditation") },
                   { emoji: "🎵", label: "白噪音", sub: "8 种 · 自然音效", color: "rgba(160,140,200,0.7)", action: () => { setOverlay(null); setWhiteNoiseOpen(true); } },
-                  { emoji: "🌙", label: "睡前故事", sub: "温柔朗读 · 助眠", color: "rgba(200,140,160,0.7)", disabled: true, action: () => {} },
-                  { emoji: "💆", label: "肌肉放松", sub: "8 分钟 · 渐进松弛", color: "rgba(180,145,100,0.7)", disabled: true, action: () => {} },
+                  { emoji: "🌙", label: "睡前故事", sub: "3 分钟 · 温柔朗读", color: "rgba(200,140,160,0.7)", action: () => setOverlay("guide-story") },
+                  { emoji: "💆", label: "肌肉放松", sub: "3 分钟 · 渐进松弛", color: "rgba(180,145,100,0.7)", action: () => setOverlay("guide-muscle") },
                   { emoji: "😴", label: "直接睡", sub: "记录睡眠 · 晚安", color: "rgba(130,145,165,0.7)", action: () => { setOverlay(null); triggerGoodnight(); } },
                 ].map((tool, i) => (
                   <motion.button
@@ -433,11 +438,9 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.05 }}
-                    whileTap={tool.disabled ? {} : { scale: 0.95 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={tool.action}
-                    disabled={tool.disabled}
-                    className={`relative overflow-hidden rounded-2xl text-left press-feedback aspect-square flex flex-col justify-between p-4
-                      ${tool.disabled ? "opacity-40" : ""}`}
+                    className="relative overflow-hidden rounded-2xl text-left press-feedback aspect-square flex flex-col justify-between p-4"
                     style={{
                       background: `linear-gradient(145deg, ${tool.color.replace(/[\d.]+\)$/, "0.15)")}, rgba(255,255,255,0.02))`,
                       border: `1px solid ${tool.color.replace(/[\d.]+\)$/, "0.12)")}`,
@@ -451,9 +454,6 @@ export default function Home() {
                     <div className="relative z-10">
                       <p className="text-warm-100 text-sm font-medium">{tool.label}</p>
                       <p className="text-warm-300/35 text-[10px] mt-0.5">{tool.sub}</p>
-                      {tool.disabled && (
-                        <span className="text-warm-300/25 text-[9px] mt-1 inline-block">即将上线</span>
-                      )}
                     </div>
                   </motion.button>
                 ))}
@@ -514,6 +514,52 @@ export default function Home() {
             }}
             onComplete={() => { setOverlay(null); setPlayingRitual(null); triggerGoodnight(); }}
             onClose={() => { setOverlay(null); setPlayingRitual(null); }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* 引导式音频播放器 */}
+      <AnimatePresence>
+        {overlay === "guide-body-scan" && (
+          <GuidedAudioPlayer
+            title="身体扫描" subtitle="从头到脚，逐步放松"
+            emoji="🧘" audioSrc="/guides/body-scan.mp3"
+            color="rgba(140,180,140,0.5)"
+            onComplete={() => setOverlay(null)}
+            onClose={() => setOverlay("sleep-tools")}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {overlay === "guide-meditation" && (
+          <GuidedAudioPlayer
+            title="潮汐冥想" subtitle="跟着海浪的节奏呼吸"
+            emoji="🌊" audioSrc="/guides/meditation.mp3"
+            color="rgba(100,145,220,0.5)"
+            onComplete={() => setOverlay(null)}
+            onClose={() => setOverlay("sleep-tools")}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {overlay === "guide-muscle" && (
+          <GuidedAudioPlayer
+            title="肌肉放松" subtitle="紧绷再松开，感受放松"
+            emoji="💆" audioSrc="/guides/muscle-relax.mp3"
+            color="rgba(180,145,100,0.5)"
+            onComplete={() => setOverlay(null)}
+            onClose={() => setOverlay("sleep-tools")}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {overlay === "guide-story" && (
+          <GuidedAudioPlayer
+            title="睡前故事" subtitle="一座被薄雾笼罩的小镇"
+            emoji="🌙" audioSrc="/guides/sleep-story.mp3"
+            color="rgba(200,140,160,0.5)"
+            onComplete={() => setOverlay(null)}
+            onClose={() => setOverlay("sleep-tools")}
           />
         )}
       </AnimatePresence>
